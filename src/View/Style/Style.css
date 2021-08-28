@@ -1,0 +1,13 @@
+#topbar{
+    -fx-background-color: #171b25;
+    -fx-background-radius: 3.14 3.14 0.0 0.0;
+}
+
+#bottombar{
+    -fx-background-color: #171b25;
+    -fx-background-radius: 0.0 0.0 3.14 3.14;
+}
+
+FontAwesomeIcon:hover{
+    -fx-cursor:hand;
+}
