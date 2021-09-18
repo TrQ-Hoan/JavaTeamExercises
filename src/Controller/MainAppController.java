@@ -289,6 +289,7 @@ public class MainAppController implements Initializable {
             });
         
          */
+        mediaPlayer.setVolume(volumeSlider.getValue() / 100);
         timeSlider.setValue(0);
 
         // T = MediaPlayer.Status

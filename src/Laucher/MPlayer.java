@@ -20,17 +20,23 @@ public class MPlayer extends Application {
     private static String OS;
 
     @Override
-    public void start(Stage stage) throws Exception {
-
-        Parent root;
+    public void start(Stage stage) {
+        Parent root = null;
+        FXMLLoader loader = null;
         if (OS.startsWith("Windows")) {
-            root = getWin();
+            loader = new FXMLLoader(getClass().getResource("/View/MainApp.fxml"));
         } else if (OS.startsWith("Mac")) {
-            root = getMac();
+            loader = new FXMLLoader(getClass().getClassLoader().getResource("View/mainApp.fxml"));
         } else {
-            root = getMac();
+            System.out.println("Your OS doesn't support");
             System.exit(0);
         }
+        try {
+            root = loader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(MPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        stage.setTitle("MPlayer");
         stage.initStyle(StageStyle.TRANSPARENT);
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -43,23 +49,6 @@ public class MPlayer extends Application {
      */
     public static void main(String[] args) {
         OS = System.getProperty("os.name");
-        System.out.println(OS);
         launch(args);
     }
-
-    public Parent getWin() {
-        Parent root = null;
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/View/MainApp.fxml"));
-            root = (Parent) loader.load();
-        } catch (IOException ex) {
-            Logger.getLogger(MPlayer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return root;
-    }
-
-    public Parent getMac() throws IOException {
-        return (Parent) FXMLLoader.load(getClass().getClassLoader().getResource("View/mainApp.fxml"));
-    }
-
 }
