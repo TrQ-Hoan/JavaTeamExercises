@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
 
 /**
  *
@@ -16,25 +18,32 @@ import java.util.stream.IntStream;
  */
 public class SongController {
 
-    private List<Song> listSong = new ArrayList<>();
+    private List<Song> listSong;
     private List<Integer> listSong_s;
     private int current;
+    private DirectoryChooser directoryChooser;
 
     SongController() { // khởi tạo class
-        // lấy đường dẫn của người dùng đang chạy thiết bị
-        String userprofile = System.getenv("USERPROFILE");
-        // tạo đường dẫn đến thư mục music mặc định của người dùng
-        String dir = userprofile + "/Music/";
-        // thêm folder music với đường dẫn dir
-        addFolder(dir);
+        listSong = new ArrayList<>();
+        openFileX();
         // khởi tạo biến lưu vị trí cho bài hát hiện tại trong list
         current = 0;
     }
 
-    public void addOtherFolder(String dir) {
-        addFolder(dir);
+    public void addOtherFolder() {
+        openFileX();
     }
-    
+
+    private void openFileX() {
+        directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Chọn thư mục có file *.mp3, *.m4a");
+        File file = directoryChooser.showDialog(new Stage());
+        if (file == null) { // nếu thoát cửa sổ mở file
+            return;
+        }
+        addFolder(file.toString() + "/");
+    }
+
     // mở thư mục và thêm bài hát vào list
     private void addFolder(String dir) {
         try {
@@ -44,6 +53,10 @@ public class SongController {
             FilenameFilter filter = (File ff, String name) -> (name.endsWith(".mp3") || name.endsWith(".m4a"));
             // đưa các file mp3/m4a vào mảng
             File[] files = f.listFiles(filter);
+            // nếu mở vào folder không có nhạc
+            if (files.length < 1 && listSong.isEmpty()) {
+                return;
+            }
             for (File file : files) {
                 // đưa các file mp3/m4a vào list Song
                 listSong.add(new Song(dir, file.getName()));
@@ -54,27 +67,27 @@ public class SongController {
             Collections.shuffle(listSong_s);
 
             // in ra list bài hát
-            listSong.forEach(System.out::println);
-            System.err.println(listSong.size());
+            //listSong.forEach(System.out::println);
+            //System.err.println(listSong.size());
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
-    
+
     // làm mới list shuffle
-    public void shuffle(){
+    public void shuffle() {
         Collections.shuffle(listSong_s, new Random());
     }
 
     // lấy vị trí cuối cùng của list
-    private int lastSong() {
+    public int lastSong() {
         return listSong.size() - 1;
     }
-    
-    public boolean isLastSong(){
+
+    public boolean isLastSong() {
         return current == lastSong();
     }
-    
+
     // kiểm tra chỉ mục i trong list
     private int roudBin(int i) {
         if (i < 0) {
@@ -108,9 +121,9 @@ public class SongController {
         int i = roudBin(listSong_s.indexOf(current) - 1);
         current = listSong_s.get(i);
     }
-    
+
     // trả về bài hát hiện tại
-    public Song getSong(){
+    public Song getSong() {
         return listSong.get(current);
     }
 }

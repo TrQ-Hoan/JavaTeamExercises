@@ -5,12 +5,9 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -32,6 +28,7 @@ public class MainAppController implements Initializable {
     private boolean isMute;
     private boolean isPlay;
     private boolean isShuf;
+    private boolean blocked;
     private int nuLoop;
     private double currentVolume;
     private MediaPlayer mediaPlayer;
@@ -78,7 +75,7 @@ public class MainAppController implements Initializable {
                 break;
         }
     }
-    
+
     private void changedLoop() {
         if (nuLoop == 2 || (nuLoop == 0 && !ctrlSong.isLastSong())) {
             mediaPlayer.setOnEndOfMedia(() -> nextSong(null));
@@ -96,9 +93,12 @@ public class MainAppController implements Initializable {
             });
         }
     }
-    
+
     @FXML // bài hát tiếp theo
     void nextSong(MouseEvent event) {
+        if (blocked) {
+            return;
+        }
         mediaPlayer.stop();
         mediaPlayer.dispose();
         if (!isShuf) {
@@ -119,6 +119,9 @@ public class MainAppController implements Initializable {
 
     @FXML // phát/dừng bài hát
     void playPause(MouseEvent event) {
+        if (blocked) {
+            return;
+        }
         // thay đổi giá trị biến kiểm tra phát hay không phát
         isPlay = !isPlay;
         // thay đổi icon play/pause
@@ -133,6 +136,9 @@ public class MainAppController implements Initializable {
 
     @FXML // trở lại bài hát trước
     void prevSong(MouseEvent event) {
+        if (blocked) {
+            return;
+        }
         mediaPlayer.stop();
         mediaPlayer.dispose();
         if (!isShuf) {
@@ -144,7 +150,6 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(ctrlSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
-//        timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
         if (isPlay) {
             mediaPlayer.play();
         }
@@ -154,12 +159,11 @@ public class MainAppController implements Initializable {
     // (next version) hiển thị nội dung menu
     @FXML // thêm thư mục bài hát
     void showMenu(MouseEvent event) {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Choose a music directory");
-        File file = directoryChooser.showDialog(new Stage());
-        
-        ctrlSong.addOtherFolder(file.toString() + "/");
-
+        ctrlSong.addOtherFolder();
+        if (ctrlSong.lastSong() > 0) {
+            blocked = false;
+            volumeSlider.setDisable(false);
+        }
     }
 
     @FXML // chuyển đổi giữa shuffle và không shuffle
@@ -167,7 +171,7 @@ public class MainAppController implements Initializable {
         // thay đổi giá trị biến kiểm tra shuffle hay không shuffle
         isShuf = !isShuf;
         // tạo list shuffle mới
-        if (isShuf) {
+        if (isShuf && !blocked) {
             ctrlSong.shuffle();
         }
         // thay đổi icon shuffle/non-shuffle
@@ -235,20 +239,23 @@ public class MainAppController implements Initializable {
         isShuf = false;
         // giá trị biến loop ban đầu = 0 (-> không loop)
         nuLoop = 0;
-        // giá trị âm lượn ban đầu bằng giá trị âm lượ trên thanh trượt mặc định (= 50)
+        // giá trị âm lượng ban đầu bằng giá trị âm lượng trên thanh trượt mặc định (= 50)
         currentVolume = volumeSlider.getValue();
 
         ctrlSong = new SongController();
-        curSong = new Media(ctrlSong.getSong().getUri());
-        mediaPlayer = new MediaPlayer(curSong);
+        if (ctrlSong.lastSong() > 0) {
+            curSong = new Media(ctrlSong.getSong().getUri());
+            mediaPlayer = new MediaPlayer(curSong);
+            blocked = false;
+        } else {
+            volumeSlider.setDisable(true);
+            blocked = true;
+        }
 
         // thay đổi giá trị âm lượng khi kéo thanh trượt
-        volumeSlider.valueProperty().addListener(new ChangeListener<Object>() {
-            @Override
-            public void changed(ObservableValue<? extends Object> observable, Object oldValue, Object newValue) {
-                currentVolume = volumeSlider.getValue();
-                setIconMute();
-            }
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            currentVolume = volumeSlider.getValue();
+            setIconMute();
         });
         timeSlider.valueFactoryProperty().setValue(param -> new StringBinding() {
             @Override
@@ -262,6 +269,9 @@ public class MainAppController implements Initializable {
     }
 
     private void playMedia() {
+        if (blocked) {
+            return;
+        }
         /*
         Normal using:
             ClassObject.<func>.addListener(new ChangeListener<T>() {
@@ -278,7 +288,7 @@ public class MainAppController implements Initializable {
                 <code>
             });
         
-        */
+         */
         timeSlider.setValue(0);
 
         // T = MediaPlayer.Status
