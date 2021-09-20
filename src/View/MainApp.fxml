@@ -24,7 +24,7 @@
                <children>
                   <Label fx:id="titleSong" alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="547.0" text="Title" textAlignment="CENTER" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
                      <font>
-                        <Font name="MS UI Gothic" size="24.0" />
+                        <Font name="MS UI Gothic" size="23.0" />
                      </font>
                   </Label>
                   <Label fx:id="artistSong" alignment="TOP_CENTER" prefHeight="24.0" prefWidth="347.0" text="artist" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
@@ -54,15 +54,15 @@
          <children>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
-                  <JFXSlider fx:id="volumeSlider" indicatorPosition="RIGHT" orientation="VERTICAL" prefHeight="60.0" prefWidth="100.0" />
-                  <MaterialDesignIconView fx:id="mute" fill="#b0c4fb" glyphName="VOLUME_MEDIUM" onMouseClicked="#toggleMute" size="22" />
+                  <JFXSlider fx:id="volumeSlider" indicatorPosition="RIGHT" orientation="VERTICAL" prefHeight="60.0" prefWidth="100.0" stylesheets="@Style/volumeSliderStyle.css" />
+                  <MaterialDesignIconView fx:id="mute" fill="#c9cfe1" glyphName="VOLUME_MEDIUM" onMouseClicked="#toggleMute" size="22" />
                </children>
             </VBox>
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="435.0">
                <children>
                   <VBox prefHeight="30.0" prefWidth="416.0">
                      <children>
-                        <JFXSlider fx:id="timeSlider" prefHeight="30.0" prefWidth="415.0">
+                        <JFXSlider fx:id="timeSlider" prefHeight="30.0" prefWidth="415.0" stylesheets="@Style/timeSliderStyle.css">
                            <padding>
                               <Insets bottom="13.0" left="10.0" right="10.0" top="13.0" />
                            </padding>
@@ -73,33 +73,33 @@
                      <children>
                         <Label fx:id="currentTime" text="00:00" textFill="WHITE">
                            <padding>
-                              <Insets right="70.0" />
+                              <Insets bottom="40.0" right="70.0" />
                            </padding>
                         </Label>
-                        <MaterialDesignIconView fx:id="btnShuf" fill="#b0c4fb" glyphName="SHUFFLE_DISABLED" onMouseClicked="#toggleShuffle" size="22" />
-                        <FontAwesomeIconView fx:id="btnPrev" fill="#b0c4fb" glyphName="STEP_BACKWARD" onMouseClicked="#prevSong" size="22">
+                        <MaterialDesignIconView fx:id="btnShuf" fill="#c9cfe1" glyphName="SHUFFLE_DISABLED" onMouseClicked="#toggleShuffle" size="22" />
+                        <FontAwesomeIconView fx:id="btnPrev" fill="#c9cfe1" glyphName="STEP_BACKWARD" onMouseClicked="#prevSong" size="22">
                            <HBox.margin>
                               <Insets left="30.0" />
                            </HBox.margin>
                         </FontAwesomeIconView>
-                        <FontAwesomeIconView fx:id="btnPlay" fill="#b0c4fb" glyphName="PLAY" onMouseClicked="#playPause" size="40" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="45.428571701049805" HBox.hgrow="NEVER">
+                        <FontAwesomeIconView fx:id="btnPlay" fill="#c9cfe1" glyphName="PLAY" onMouseClicked="#playPause" size="40" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="45.428571701049805" HBox.hgrow="NEVER">
                            <HBox.margin>
                               <Insets left="15.0" right="15.0" />
                            </HBox.margin>
                         </FontAwesomeIconView>
-                        <FontAwesomeIconView fx:id="btnNext" fill="#b0c4fb" glyphName="STEP_FORWARD" onMouseClicked="#nextSong" size="22" textAlignment="RIGHT">
+                        <FontAwesomeIconView fx:id="btnNext" fill="#c9cfe1" glyphName="STEP_FORWARD" onMouseClicked="#nextSong" size="22" textAlignment="RIGHT">
                            <HBox.margin>
                               <Insets right="30.0" />
                            </HBox.margin>
                         </FontAwesomeIconView>
-                        <MaterialDesignIconView fx:id="btnLoop" fill="#b0c4fb" glyphName="REPEAT_OFF" onMouseClicked="#changeLoop" size="22" textAlignment="RIGHT">
+                        <MaterialDesignIconView fx:id="btnLoop" fill="#c9cfe1" glyphName="REPEAT_OFF" onMouseClicked="#changeLoop" size="22" textAlignment="RIGHT">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
                         </MaterialDesignIconView>
                         <Label fx:id="totalTime" text="xx:xx" textAlignment="RIGHT" textFill="WHITE">
                            <padding>
-                              <Insets left="70.0" />
+                              <Insets bottom="40.0" left="70.0" />
                            </padding>
                         </Label>
                      </children>
@@ -108,7 +108,7 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
-                  <MaterialDesignIconView fx:id="btnMenu" fill="#b0c4fb" glyphName="MENU" onMouseClicked="#showMenu" size="22">
+                  <MaterialDesignIconView fx:id="btnMenu" fill="#c9cfe1" glyphName="MENU" onMouseClicked="#showMenu" size="22">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -127,17 +127,17 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
-            <FontAwesomeIconView fill="#ff888a" glyphName="CLOSE" onMousePressed="#closeApp" size="21">
+            <FontAwesomeIconView fill="#ecb7d3" glyphName="CLOSE" onMousePressed="#closeApp" size="21">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
             </FontAwesomeIconView>
-            <FontAwesomeIconView fill="#eccc8c" glyphName="CIRCLE_ALT" size="18">
+            <FontAwesomeIconView fill="#ffeecb" glyphName="CIRCLE_ALT" size="18">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
             </FontAwesomeIconView>
-            <FontAwesomeIconView fill="#82ff89" glyphName="MINUS" onMouseReleased="#minimizeApp" size="20">
+            <FontAwesomeIconView fill="#d3fbd8" glyphName="MINUS" onMouseReleased="#minimizeApp" size="20">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
