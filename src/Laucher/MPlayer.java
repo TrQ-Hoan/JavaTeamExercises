@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -37,6 +38,7 @@ public class MPlayer extends Application {
             Logger.getLogger(MPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
         stage.setTitle("MPlayer");
+        stage.getIcons().add(new Image("/resource/logo.png"));
         stage.initStyle(StageStyle.TRANSPARENT);
         Scene scene = new Scene(root);
         stage.setScene(scene);
