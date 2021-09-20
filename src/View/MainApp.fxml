@@ -5,17 +5,47 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
    <center>
       <JFXDrawer style="-fx-background-color: #222835;" BorderPane.alignment="CENTER">
          <children>
-            <FontAwesomeIconView fill="#36d057" glyphName="SPOTIFY" size="120" />
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="titleSong" alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="547.0" text="Title" textAlignment="CENTER" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font name="MS UI Gothic" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="artistSong" alignment="TOP_CENTER" prefHeight="24.0" prefWidth="347.0" text="artist" textFill="WHITE" textOverrun="CENTER_ELLIPSIS">
+                     <font>
+                        <Font name="Leelawadee UI" size="16.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="imageSong" fitHeight="214.0" fitWidth="214.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resource/BaseImage.png" />
+                     </image></ImageView>
+                  <BarChart fx:id="bc" alternativeRowFillVisible="false" animated="false" barGap="0.0" categoryGap="0.0" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false" prefHeight="147.0" prefWidth="301.0" styleClass="chart" stylesheets="@Style/Style.css" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+                    <xAxis>
+                      <CategoryAxis prefHeight="0.0" prefWidth="570.0" side="BOTTOM" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" fx:id="xAxis" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis fx:id="yAxis" lowerBound="-50.0" minorTickCount="10" minorTickVisible="false" prefHeight="64.0" prefWidth="0.0" side="LEFT" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="10.0" upperBound="50.0" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </VBox>
          </children>
       </JFXDrawer>
    </center>
@@ -89,7 +119,7 @@
       </HBox>
    </bottom>
    <top>
-      <HBox id="topbar" alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="600.0" stylesheets="@Style/Style.css" BorderPane.alignment="CENTER">
+      <HBox id="topbar" alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="600.0" stylesheets="@Style/Style.css" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>

@@ -9,8 +9,13 @@ import java.util.regex.Pattern;
 import com.ithaka.audioinfo.AudioInfo;
 import com.ithaka.audioinfo.mp3.MP3Info;
 import com.ithaka.audioinfo.m4a.M4AInfo;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -25,6 +30,7 @@ public class Song {
     private List<Artist> artists;
     private Album album;
     private String genre;
+    private Image cover;
 
     public Song(String directory, String fileName) {
         this.path = directory + fileName;
@@ -45,6 +51,12 @@ public class Song {
                 this.album = new Album(song.getAlbum());
                 setArtists(song.getArtist());
                 this.genre = genre_ == null ? "" : genre_;
+                boolean validCover = song.getCover() != null;
+                if (validCover) {
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(song.getCover()));
+                    this.cover = SwingFXUtils.toFXImage(image, null);
+                    image.flush(); // clear buffer
+                }
                 //System.out.printf("Track:  %s\n", song.getTrack());
                 //System.out.printf("Year:   %s\n\n", song.getYear());
             } catch (Exception e) {
@@ -98,10 +110,15 @@ public class Song {
         return title;
     }
 
-    public List<Artist> getArtists() {
-        return artists;
+    public String getArtists() {
+        String sArrArtist = artists.toString();
+        return sArrArtist.substring(1, sArrArtist.length() - 1);
     }
 
+    public Image getCover() {
+        return cover;
+    }
+    
     public Album getAlbum() {
         return album;
     }

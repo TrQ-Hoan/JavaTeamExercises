@@ -5,14 +5,23 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -34,7 +43,23 @@ public class MainAppController implements Initializable {
     private MediaPlayer mediaPlayer;
     private Media curSong;
     private SongController ctrlSong;
+    private XYChart.Data<String, Number>[] series1Data, series2Data;
+    private AudioSpectrumListener audioSpectrumListener;
+    private XYChart.Series<String, Number> series1, series2;
+    private final Image baseImage = new Image(getClass().getResourceAsStream("/resource/BaseImage.png"));;
 
+    @FXML
+    private Label titleSong;
+    @FXML
+    private Label artistSong;
+    @FXML
+    private ImageView imageSong;
+    @FXML
+    private BarChart<String, Number> bc;
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
     @FXML
     private JFXSlider volumeSlider;
     @FXML
@@ -76,17 +101,22 @@ public class MainAppController implements Initializable {
         }
     }
 
+    // thay đổi bài hát tiếp theo khi thay đổi vòng lặp (0 lặp, lặp toàn bộ, lặp một bài)
     private void changedLoop() {
+        // lặp toàn bộ HOẶC đang không lặp và không phải bài cuối cùng
         if (nuLoop == 2 || (nuLoop == 0 && !ctrlSong.isLastSong())) {
+            // khi chạy hết bài thì gọi bài tiếp theo (tự động quay lại khi đến bài cuối cùng)
             mediaPlayer.setOnEndOfMedia(() -> nextSong(null));
-        } else if (nuLoop == 0 && ctrlSong.isLastSong()) {
+        } else if (nuLoop == 0 && ctrlSong.isLastSong()) { // không lặp
+            // khi bài cuối cùng trong danh sách chạy xong thì dừng phát
             mediaPlayer.setOnEndOfMedia(() -> {
                 mediaPlayer.stop();
                 mediaPlayer.dispose();
                 playPause(null);
                 nextSong(null);
             });
-        } else {
+        } else { // lặp một bài
+            // khi bài hát chạy hết lại đặt lại thời gian là 0
             mediaPlayer.setOnEndOfMedia(() -> {
                 timeSlider.setValue(0);
                 mediaPlayer.seek(Duration.ZERO);
@@ -96,7 +126,7 @@ public class MainAppController implements Initializable {
 
     @FXML // bài hát tiếp theo
     void nextSong(MouseEvent event) {
-        if (blocked) {
+        if (blocked) { // nếu như vô hiệu hóa thì thoát khỏi hàm
             return;
         }
         mediaPlayer.stop();
@@ -110,16 +140,13 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(ctrlSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
-        if (isPlay) {
-            mediaPlayer.play();
-        }
         playMedia();
 
     }
 
     @FXML // phát/dừng bài hát
     void playPause(MouseEvent event) {
-        if (blocked) {
+        if (blocked) { // nếu như vô hiệu hóa thì thoát khỏi hàm
             return;
         }
         // thay đổi giá trị biến kiểm tra phát hay không phát
@@ -128,7 +155,9 @@ public class MainAppController implements Initializable {
         btnPlay.setIcon(isPlay ? FontAwesomeIcon.PAUSE : FontAwesomeIcon.PLAY);
         if (isPlay) {
             mediaPlayer.play();
-            timeSlider.setMax(curSong.getDuration().toSeconds());
+            if (!bc.isVisible()) {
+                bc.setVisible(true);
+            }
         } else {
             mediaPlayer.pause();
         }
@@ -136,7 +165,7 @@ public class MainAppController implements Initializable {
 
     @FXML // trở lại bài hát trước
     void prevSong(MouseEvent event) {
-        if (blocked) {
+        if (blocked) { // nếu như vô hiệu hóa thì thoát khỏi hàm
             return;
         }
         mediaPlayer.stop();
@@ -150,9 +179,6 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(ctrlSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
-        if (isPlay) {
-            mediaPlayer.play();
-        }
         playMedia();
     }
 
@@ -206,7 +232,7 @@ public class MainAppController implements Initializable {
         }
     }
 
-    @FXML // di chuyển cửa sổ ứng dụng khi nhấn dữ vào taskbar
+    @FXML // di chuyển cửa sổ ứng dụng khi nhấn dữ
     void dragged(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setX(event.getScreenX() - x);
@@ -242,12 +268,20 @@ public class MainAppController implements Initializable {
         // giá trị âm lượng ban đầu bằng giá trị âm lượng trên thanh trượt mặc định (= 50)
         currentVolume = volumeSlider.getValue();
 
+        // trục y của đồ thị biếu diễn giá trị dB
+        yAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(yAxis, null, "dB"));
+        // lưu các giá trị nhận được từ bài hát (nửa trên của đồ thị)
+        series1Data = new XYChart.Data[128];
+        // lưu các giá trị nhận được từ bài hát (nửa dưới của đồ thị)
+        series2Data = new XYChart.Data[128];
+        
+        // khởi tạo một SongController
         ctrlSong = new SongController();
-        if (ctrlSong.lastSong() > 0) {
-            curSong = new Media(ctrlSong.getSong().getUri());
-            mediaPlayer = new MediaPlayer(curSong);
-            blocked = false;
-        } else {
+        if (ctrlSong.lastSong() > 0) { // nếu như trong SongController có bài hát
+            curSong = new Media(ctrlSong.getSong().getUri()); // khởi tạo một media
+            mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
+            blocked = false; // các chức năng không bị vô hiệu hóa
+        } else { // nếu như không có bài hát nào thì vô hiệu hóa một số chức năng
             volumeSlider.setDisable(true);
             blocked = true;
         }
@@ -263,13 +297,15 @@ public class MainAppController implements Initializable {
                 return "*";
             }
         });
+        // lấy và gán giá trị khi kéo thanh trượt cho âm lượng
         volumeSlider.setOnMouseDragged(event -> mediaPlayer.setVolume(volumeSlider.getValue() / 100));
+        // lấy và gán giá trị khi click một vị trí trên thanh trượt
         volumeSlider.setOnMouseReleased(event -> mediaPlayer.setVolume(volumeSlider.getValue() / 100));
         playMedia();
     }
 
     private void playMedia() {
-        if (blocked) {
+        if (blocked) { // nếu như vô hiệu hóa thì thoát khỏi hàm
             return;
         }
         /*
@@ -289,18 +325,61 @@ public class MainAppController implements Initializable {
             });
         
          */
+        // gán âm lượng từ giá trị đang có trên thanh trượt
         mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+        // đưa thanh trượt thời gian về 0
         timeSlider.setValue(0);
 
+        // vì hàm này được gọi từ next và previous nên phải kiểm tra lại biến isPlay
+        if (!isPlay) { // nếu như đang gán không chạy thì tắt sóng âm thanh
+            bc.setVisible(false);
+        } else { // nếu như gán chạy thì tiếp tục phát âm thanh
+            mediaPlayer.play();
+            bc.setVisible(true);
+        }
+        
+        // tạo đồ thị sóng âm
+        series1 = new XYChart.Series<>(); // nửa trên của đồ thị sóng âm
+        series2 = new XYChart.Series<>(); // nửa dưới của đồ thị sóng âm
+        // thêm mảng các giá trị vào nửa trên đồ thị
+        for (int i = 0; i < series1Data.length; i++) {
+            series1Data[i] = new XYChart.Data<>(Integer.toString(i + 13), 50);
+            series1.getData().add(series1Data[i]);
+        }
+        // thêm mảng các giá trị vào nửa dưới đồ thị
+        for (int i = 0; i < series2Data.length; i++) {
+            series2Data[i] = new XYChart.Data<>(Integer.toString(i + 13), 50);
+            series2.getData().add(series2Data[i]);
+        }
+        bc.getData().clear(); // xóa dữ liệu đồ thị cũ
+        bc.getData().add(series1); // thêm nửa đồ thị trên
+        bc.getData().add(series2); // thêm nửa đồ thị dưới
+        // gán các giá trị trong mảng tương ứng với giá trị nhận được từ magnitudes của audioSpectrumListener
+        audioSpectrumListener = (double timestamp, double duration, float[] magnitudes, float[] phases) -> {
+            for (int i = 0; i < series1Data.length; i++) {
+                series1Data[i].setYValue(magnitudes[(i + 110) % 128] + 60);
+                series2Data[i].setYValue(-(magnitudes[(i + 110) % 128] + 60));
+            }
+        };
+        // lấy các giá trị của media vào audioSpectrumListener
+        mediaPlayer.setAudioSpectrumListener(audioSpectrumListener);
+        
         // T = MediaPlayer.Status
+        // mỗi khi có một file media mới được chọn
         mediaPlayer.statusProperty().addListener((observableValue, oldStatus, newStatus) -> {
-            if (newStatus == MediaPlayer.Status.READY) {
-                timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds());
+            if (newStatus == MediaPlayer.Status.READY) { // nếu như mediaPlayer đã sẵn sàng
+                timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds()); // gán thời gian lớn nhất vào thanh trượt thời gian
+                titleSong.setText(ctrlSong.getSong().getTitle()); // hiển thị tên bài hát
+                artistSong.setText(ctrlSong.getSong().getArtists()); // hiển thị tên ca sĩ
+                // nếu như trong file bài hát không có ảnh cover thì lấy ảnh mặc định
+                imageSong.setImage((Image) ctrlSong.getSong().getCover() != null ? ctrlSong.getSong().getCover() : baseImage);
+                // đặt thời gian max là thời gian của bài hát
                 totalTime.setText(String.format("%02d:%02d", (int) timeSlider.getMax() / 60, (int) timeSlider.getMax() % 60));
             }
         });
 
         // T = Boolean
+        // thay đổi thời gian của bài hát khi phát hiện thay đổi trên thanh trượt thời gian
         timeSlider.valueChangingProperty().addListener((observableValue, wasChanging, isChanging) -> {
             if (!isChanging) {
                 mediaPlayer.seek(Duration.seconds(timeSlider.getValue()));
@@ -308,13 +387,15 @@ public class MainAppController implements Initializable {
         });
 
         // T = Number
+        // khoảng thời gian chênh lệch khi kéo thanh trượt thời gian
         timeSlider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             double curTime = mediaPlayer.getCurrentTime().toSeconds();
             if (Math.abs(curTime - newValue.doubleValue()) > 0.5) {
                 mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
             }
         });
-
+        
+        // thay đổi thời gian khi dừng nhạc và kéo thanh thời gian
         timeSlider.setOnMouseDragged(event -> {
             if (!isPlay) {
                 int seconds = (int) timeSlider.getValue() % 60;
@@ -324,6 +405,7 @@ public class MainAppController implements Initializable {
         });
 
         // T = Duration
+        // thay đổi thời gia khi nhạc đang phát
         mediaPlayer.currentTimeProperty().addListener((observableValue, oldTime, newTime) -> {
             if (!timeSlider.isValueChanging()) {
                 int seconds = (int) timeSlider.getValue() % 60;
