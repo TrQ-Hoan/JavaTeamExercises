@@ -5,8 +5,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
-import java.io.File;
-import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.StringBinding;
@@ -42,11 +40,11 @@ public class MainAppController implements Initializable {
     private double currentVolume;
     private MediaPlayer mediaPlayer;
     private Media curSong;
-    private SongController ctrlSong;
+    private SongController listSong;
     private XYChart.Data<String, Number>[] series1Data, series2Data;
     private AudioSpectrumListener audioSpectrumListener;
     private XYChart.Series<String, Number> series1, series2;
-    private final Image baseImage = new Image(getClass().getResourceAsStream("/resource/BaseImage.png"));;
+    private final Image baseImage = new Image(getClass().getResourceAsStream("/resource/BaseImage.png"));
 
     @FXML
     private Label titleSong;
@@ -104,10 +102,10 @@ public class MainAppController implements Initializable {
     // thay đổi bài hát tiếp theo khi thay đổi vòng lặp (0 lặp, lặp toàn bộ, lặp một bài)
     private void changedLoop() {
         // lặp toàn bộ HOẶC đang không lặp và không phải bài cuối cùng
-        if (nuLoop == 2 || (nuLoop == 0 && !ctrlSong.isLastSong())) {
+        if (nuLoop == 2 || (nuLoop == 0 && !listSong.isLastSong())) {
             // khi chạy hết bài thì gọi bài tiếp theo (tự động quay lại khi đến bài cuối cùng)
             mediaPlayer.setOnEndOfMedia(() -> nextSong(null));
-        } else if (nuLoop == 0 && ctrlSong.isLastSong()) { // không lặp
+        } else if (nuLoop == 0 && listSong.isLastSong()) { // không lặp
             // khi bài cuối cùng trong danh sách chạy xong thì dừng phát
             mediaPlayer.setOnEndOfMedia(() -> {
                 mediaPlayer.stop();
@@ -133,12 +131,12 @@ public class MainAppController implements Initializable {
         mediaPlayer.dispose();
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
-            ctrlSong.nextSong();
+            listSong.nextSong();
         } else {
             // nếu tắt chế độ shuffle
-            ctrlSong.nextShuffleSong();
+            listSong.nextShuffleSong();
         }
-        curSong = new Media(ctrlSong.getSong().getUri());
+        curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
         playMedia();
 
@@ -172,12 +170,12 @@ public class MainAppController implements Initializable {
         mediaPlayer.dispose();
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
-            ctrlSong.previousSong();
+            listSong.previousSong();
         } else {
             // nếu đang ở chế độ shuffle
-            ctrlSong.previousShuffleSong();
+            listSong.previousShuffleSong();
         }
-        curSong = new Media(ctrlSong.getSong().getUri());
+        curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
         playMedia();
     }
@@ -185,11 +183,15 @@ public class MainAppController implements Initializable {
     // (next version) hiển thị nội dung menu
     @FXML // thêm thư mục bài hát
     void showMenu(MouseEvent event) {
-        ctrlSong.addOtherFolder();
-        if (ctrlSong.lastSong() > 0) {
-            blocked = false;
-            volumeSlider.setDisable(false);
+        listSong.addOtherFolder();
+        if (listSong.isEmpty()) {
+            return;
         }
+        blocked = false;
+        volumeSlider.setDisable(false);
+        curSong = new Media(listSong.getSong().getUri());
+        mediaPlayer = new MediaPlayer(curSong);
+        playMedia();
     }
 
     @FXML // chuyển đổi giữa shuffle và không shuffle
@@ -198,7 +200,7 @@ public class MainAppController implements Initializable {
         isShuf = !isShuf;
         // tạo list shuffle mới
         if (isShuf && !blocked) {
-            ctrlSong.shuffle();
+            listSong.shuffle();
         }
         // thay đổi icon shuffle/non-shuffle
         btnShuf.setIcon(isShuf ? MaterialDesignIcon.SHUFFLE : MaterialDesignIcon.SHUFFLE_DISABLED);
@@ -274,11 +276,11 @@ public class MainAppController implements Initializable {
         series1Data = new XYChart.Data[128];
         // lưu các giá trị nhận được từ bài hát (nửa dưới của đồ thị)
         series2Data = new XYChart.Data[128];
-        
+
         // khởi tạo một SongController
-        ctrlSong = new SongController();
-        if (ctrlSong.lastSong() > 0) { // nếu như trong SongController có bài hát
-            curSong = new Media(ctrlSong.getSong().getUri()); // khởi tạo một media
+        listSong = new SongController();
+        if (!listSong.isEmpty()) { // nếu như trong SongController có bài hát
+            curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
         } else { // nếu như không có bài hát nào thì vô hiệu hóa một số chức năng
@@ -337,7 +339,7 @@ public class MainAppController implements Initializable {
             mediaPlayer.play();
             bc.setVisible(true);
         }
-        
+
         // tạo đồ thị sóng âm
         series1 = new XYChart.Series<>(); // nửa trên của đồ thị sóng âm
         series2 = new XYChart.Series<>(); // nửa dưới của đồ thị sóng âm
@@ -363,16 +365,16 @@ public class MainAppController implements Initializable {
         };
         // lấy các giá trị của media vào audioSpectrumListener
         mediaPlayer.setAudioSpectrumListener(audioSpectrumListener);
-        
+
         // T = MediaPlayer.Status
         // mỗi khi có một file media mới được chọn
         mediaPlayer.statusProperty().addListener((observableValue, oldStatus, newStatus) -> {
             if (newStatus == MediaPlayer.Status.READY) { // nếu như mediaPlayer đã sẵn sàng
                 timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds()); // gán thời gian lớn nhất vào thanh trượt thời gian
-                titleSong.setText(ctrlSong.getSong().getTitle()); // hiển thị tên bài hát
-                artistSong.setText(ctrlSong.getSong().getArtists()); // hiển thị tên ca sĩ
+                titleSong.setText(listSong.getSong().getTitle()); // hiển thị tên bài hát
+                artistSong.setText(listSong.getSong().getArtists()); // hiển thị tên ca sĩ
                 // nếu như trong file bài hát không có ảnh cover thì lấy ảnh mặc định
-                imageSong.setImage((Image) ctrlSong.getSong().getCover() != null ? ctrlSong.getSong().getCover() : baseImage);
+                imageSong.setImage((Image) listSong.getSong().getCover() != null ? listSong.getSong().getCover() : baseImage);
                 // đặt thời gian max là thời gian của bài hát
                 totalTime.setText(String.format("%02d:%02d", (int) timeSlider.getMax() / 60, (int) timeSlider.getMax() % 60));
             }
@@ -394,7 +396,7 @@ public class MainAppController implements Initializable {
                 mediaPlayer.seek(Duration.seconds(newValue.doubleValue()));
             }
         });
-        
+
         // thay đổi thời gian khi dừng nhạc và kéo thanh thời gian
         timeSlider.setOnMouseDragged(event -> {
             if (!isPlay) {

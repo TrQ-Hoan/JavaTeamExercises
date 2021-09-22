@@ -67,7 +67,7 @@ public class Song {
 
     private void setArtists(String sArtist) {
         if (sArtist != null) {
-            String[] artist = sArtist.split(",\\s*");
+            String[] artist = sArtist.split("[,;]\\s*");
             for (String ar : artist) {
                 artists.add(new Artist(ar));
             }

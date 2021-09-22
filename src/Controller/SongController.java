@@ -84,6 +84,11 @@ public class SongController {
         return listSong.size() - 1;
     }
 
+    // kiể tra danh sách bài hát rỗng hay không
+    public boolean isEmpty() {
+        return listSong.isEmpty();
+    }
+
     public boolean isLastSong() {
         return current == lastSong();
     }
