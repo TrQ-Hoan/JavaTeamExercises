@@ -15,10 +15,24 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.ImageCursor?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.TextField?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ListView?>
+<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
+
+<BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" >
+
    <center>
-      <JFXDrawer style="-fx-background-color: #222835;" BorderPane.alignment="CENTER">
+      <JFXDrawer style="-fx-background-color: #222835;"  BorderPane.alignment="CENTER" >
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -37,18 +51,20 @@
                         <Image url="@../resource/BaseImage.png" />
                      </image></ImageView>
                   <BarChart fx:id="bc" alternativeRowFillVisible="false" animated="false" barGap="0.0" categoryGap="0.0" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false" prefHeight="147.0" prefWidth="301.0" styleClass="chart" stylesheets="@Style/Style.css" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-                    <xAxis>
-                      <CategoryAxis prefHeight="0.0" prefWidth="570.0" side="BOTTOM" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" fx:id="xAxis" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis fx:id="yAxis" lowerBound="-50.0" minorTickCount="10" minorTickVisible="false" prefHeight="64.0" prefWidth="0.0" side="LEFT" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="10.0" upperBound="50.0" />
-                    </yAxis>
+                     <xAxis>
+                        <CategoryAxis prefHeight="0.0" prefWidth="570.0" side="BOTTOM" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" fx:id="xAxis" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis fx:id="yAxis" lowerBound="-50.0" minorTickCount="10" minorTickVisible="false" prefHeight="64.0" prefWidth="0.0" side="LEFT" stylesheets="@Style/Style.css" tickLabelFill="TRANSPARENT" tickLabelsVisible="false" tickMarkVisible="false" tickUnit="10.0" upperBound="50.0" />
+                     </yAxis>
                   </BarChart>
                </children>
             </VBox>
          </children>
       </JFXDrawer>
+
    </center>
+
    <bottom>
       <HBox id="bottombar" prefHeight="100.0" prefWidth="200.0" stylesheets="@Style/Style.css" BorderPane.alignment="CENTER">
          <children>
@@ -108,16 +124,15 @@
             </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
-                  <MaterialDesignIconView fx:id="btnMenu" fill="#c9cfe1" glyphName="MENU" onMouseClicked="#showMenu" size="22">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
+                  <MaterialDesignIconView fx:id="btnMenu" fill="#c9cfe1" glyphName="MENU" onMouseClicked="#openSongList" size="25">
+
                   </MaterialDesignIconView>
                </children>
             </HBox>
          </children>
       </HBox>
    </bottom>
+
    <top>
       <HBox id="topbar" alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="600.0" stylesheets="@Style/Style.css" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -127,7 +142,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
-            <FontAwesomeIconView fill="#ecb7d3" glyphName="CLOSE" onMousePressed="#closeApp" size="21">
+            <FontAwesomeIconView fill="#ecb7d3" glyphName="CLOSE" onMouseClicked="#closeApp" size="21">
                <HBox.margin>
                   <Insets left="8.0" />
                </HBox.margin>
@@ -146,3 +161,62 @@
       </HBox>
    </top>
 </BorderPane>
+<!--             ================     music List   ====================                      -->
+   <AnchorPane fx:id="anchorPane"  style="-fx-background-color: TRANSPARENT;" visible="false">
+      <VBox alignment="TOP_CENTER"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" layoutX="200" prefWidth="400" prefHeight="462" style="-fx-background-color: #2A324F;"  >
+         <children>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #60CC96;">
+               <children>
+                  <FontAwesomeIconView fill="#000" glyphName="CLOSE"  onMouseClicked="#closeSongList" size="25"/>
+
+                  <HBox alignment="CENTER">
+                     <children>
+                        <ImageView fitHeight="35.0" fitWidth="85.0"  pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../resource/music logo.jpg" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="35.0" prefWidth="104.0" text="Musique" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Bold" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="40.0" right="40.0" />
+                     </HBox.margin>
+                  </HBox>
+
+                  <ImageView fitHeight="30.0" fitWidth="30.0"  pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../resource/taskList.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+
+            <HBox alignment="BOTTOM_CENTER">
+               <VBox.margin>
+                  <Insets bottom="15.0" left="50.0" right="40.0" top="5.0" />
+               </VBox.margin>
+               <children>
+                  <JFXTextField fx:id="searchBar" focusColor="WHITE" prefHeight="44.0" prefWidth="240.0" promptText="Search..." stylesheets="@/StyleCss/musicListViewStyle.css" unFocusColor="WHITE">
+                     <font>
+                        <Font name="Segoe UI Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="15.0" />
+                     </HBox.margin>
+                  </JFXTextField>
+               </children>
+            </HBox>
+            <ListView fx:id="musicList" style="-fx-background-color: #2A324F;" stylesheets="@/StyleCss/musicListViewStyle.css" VBox.vgrow="ALWAYS">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ListView>
+         </children>
+      </VBox>
+   </AnchorPane>
+
+</StackPane>

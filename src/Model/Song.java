@@ -32,7 +32,7 @@ public class Song {
     private String genre;
     private Image cover;
 
-    public Song(String directory, String fileName) {
+    public Song(String s, String directory, String fileName) {
         this.path = directory + fileName;
         this.fileName = fileName;
         if (this.fileName.endsWith(".mp3") || this.fileName.endsWith(".m4a")) {

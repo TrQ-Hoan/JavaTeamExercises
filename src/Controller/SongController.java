@@ -23,6 +23,9 @@ public class SongController {
     private int current;
     private DirectoryChooser directoryChooser;
 
+    public static SongController instance;
+
+
     SongController() { // khởi tạo class
         listSong = new ArrayList<>();
         openFileX();
@@ -59,7 +62,7 @@ public class SongController {
             }
             for (File file : files) {
                 // đưa các file mp3/m4a vào list Song
-                listSong.add(new Song(dir, file.getName()));
+                listSong.add(new Song("", dir, file.getName()));
             }
             // tạo một list số thứ tự các bài hát 
             listSong_s = IntStream.range(0, listSong.size()).boxed().collect(Collectors.toList());
@@ -130,5 +133,17 @@ public class SongController {
     // trả về bài hát hiện tại
     public Song getSong() {
         return listSong.get(current);
+    }
+
+    public int getSizeOfList(){
+        return listSong.size();
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
     }
 }

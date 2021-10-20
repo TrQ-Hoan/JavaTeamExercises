@@ -27,7 +27,7 @@ public class MPlayer extends Application {
         if (OS.startsWith("Windows")) {
             loader = new FXMLLoader(getClass().getResource("/View/MainApp.fxml"));
         } else if (OS.startsWith("Mac")) {
-            loader = new FXMLLoader(getClass().getClassLoader().getResource("View/mainApp.fxml"));
+            loader = new FXMLLoader(getClass().getClassLoader().getResource("View/MainAppController.fxml"));
         } else {
             System.out.println("Your OS doesn't support");
             System.exit(0);
