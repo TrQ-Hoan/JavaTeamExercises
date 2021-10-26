@@ -27,7 +27,8 @@
 
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.ListView?>
-<StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
+<?import javafx.scene.effect.Shadow?>
+<StackPane style="-fx-background-radius: 7.0 7.0 7.0 7.0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
 
 <BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" >
 
@@ -62,7 +63,6 @@
             </VBox>
          </children>
       </JFXDrawer>
-
    </center>
 
    <bottom>
@@ -161,14 +161,17 @@
       </HBox>
    </top>
 </BorderPane>
-<!--             ================     music List   ====================                      -->
-   <AnchorPane fx:id="anchorPane"  style="-fx-background-color: TRANSPARENT;" visible="false">
-      <VBox alignment="TOP_CENTER"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" layoutX="200" prefWidth="400" prefHeight="462" style="-fx-background-color: #2A324F;"  >
-         <children>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #60CC96;">
-               <children>
-                  <FontAwesomeIconView fill="#000" glyphName="CLOSE"  onMouseClicked="#closeSongList" size="25"/>
 
+<!--             ================     music List   ====================                      -->
+   <AnchorPane fx:id="anchorPane" onMouseClicked="#selected1" style="-fx-background-color: TRANSPARENT;" visible="false">
+      <VBox layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;"  >
+         <effect>
+            <DropShadow color="black" radius="20" height="450" width="380"  />
+         </effect>
+         <children>
+            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #008b8b;">
+               <children>
+                  <FontAwesomeIconView fill="#000" glyphName="CLOSE" onMouseClicked="#closeSongList" size="25"/>
                   <HBox alignment="CENTER">
                      <children>
                         <ImageView fitHeight="35.0" fitWidth="85.0"  pickOnBounds="true" preserveRatio="true">
@@ -176,7 +179,7 @@
                               <Image url="@../resource/music logo.jpg" />
                            </image>
                         </ImageView>
-                        <Label prefHeight="35.0" prefWidth="104.0" text="Musique" textAlignment="CENTER" textFill="WHITE">
+                        <Label prefHeight="50.0" prefWidth="100.0" text="Musique" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Bold" size="24.0" />
                            </font>
@@ -186,12 +189,6 @@
                         <Insets left="40.0" right="40.0" />
                      </HBox.margin>
                   </HBox>
-
-                  <ImageView fitHeight="30.0" fitWidth="30.0"  pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../resource/taskList.jpg" />
-                     </image>
-                  </ImageView>
                </children>
             </HBox>
 
@@ -200,17 +197,14 @@
                   <Insets bottom="15.0" left="50.0" right="40.0" top="5.0" />
                </VBox.margin>
                <children>
-                  <JFXTextField fx:id="searchBar" focusColor="WHITE" prefHeight="44.0" prefWidth="240.0" promptText="Search..." stylesheets="@/StyleCss/musicListViewStyle.css" unFocusColor="WHITE">
+                  <Label fx:id="folderName" alignment="CENTER" prefHeight="50.0" prefWidth="240.0" textFill="cyan">
                      <font>
-                        <Font name="Segoe UI Bold" size="18.0" />
+                        <Font name="Segoe UI Bold" size="20.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets right="15.0" />
-                     </HBox.margin>
-                  </JFXTextField>
+                  </Label>
                </children>
             </HBox>
-            <ListView fx:id="musicList" style="-fx-background-color: #2A324F;" stylesheets="@/StyleCss/musicListViewStyle.css" VBox.vgrow="ALWAYS">
+            <ListView fx:id="musicList"  stylesheets="@/StyleCss/musicListViewStyle.css" VBox.vgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

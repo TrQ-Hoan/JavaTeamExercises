@@ -33,6 +33,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -120,7 +121,7 @@ public class MainAppController implements Initializable {
     @FXML
     private AnchorPane anchorPane ;
     @FXML
-    private VBox vbox;
+    private Label folderName;
     @FXML
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
@@ -139,10 +140,23 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void focus(){
-        if(!vbox.isFocused()) anchorPane.setDisable(true);
+    private void selected1(){
+        click1 = true;
+    }
+    @FXML
+    private void selected2(){
+        click2 = true;
     }
 
+    private void close(){
+        if(click1 == true && click2 == false){
+            click2 = click1 = false;
+            anchorPane.setVisible(false);
+        }
+    }
+
+    private boolean click1 = false;
+    private boolean click2 = false;
 
 
     @FXML // thay đổi giữa các chế độ lặp
@@ -193,6 +207,7 @@ public class MainAppController implements Initializable {
         }
         mediaPlayer.stop();
         mediaPlayer.dispose();
+        removeCss();
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
             listSong.nextSong();
@@ -202,6 +217,7 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
+        addCss();
         playMedia();
 
     }
@@ -232,6 +248,8 @@ public class MainAppController implements Initializable {
         }
         mediaPlayer.stop();
         mediaPlayer.dispose();
+        removeCss();
+
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
             listSong.previousSong();
@@ -241,6 +259,7 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
+        addCss();
         playMedia();
     }
 
@@ -336,10 +355,22 @@ public class MainAppController implements Initializable {
     }
     private ImageView getImageView(){
         ImageView a = new ImageView();
-        a.setFitHeight(30);
-        a.setFitWidth(30);
+        a.setFitHeight(35);
+        a.setFitWidth(35);
         a.setImage((listSong.getSong().getCover()) == null ? baseImage : listSong.getSong().getCover());
         return a;
+    }
+
+    private void removeCss(){
+        int index = listSong.getCurrentIndex();
+        musicListObservableList.get(index).setPadding(new Insets(0,360,0,0));
+        musicListObservableList.get(index).setStyle("-fx-background-color:none");
+    }
+
+    private void addCss(){
+        int index = listSong.getCurrentIndex();
+        musicListObservableList.get(index).setPadding(new Insets(10,360,10,10));
+        musicListObservableList.get(index).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
     }
 
 //==================================================== click vao bai hat================================================
@@ -349,8 +380,10 @@ public class MainAppController implements Initializable {
                     @Override
                     public void handle(javafx.scene.input.MouseEvent e) {
                         mediaPlayer.stop();
+                        removeCss();
                         int index = Integer.parseInt(label.getId());
                         listSong.setCurrent(index);
+                        addCss();
                         curSong = new Media(listSong.getSong().getUri());
                         mediaPlayer = new MediaPlayer(curSong);
                         mediaPlayer.play();
@@ -363,24 +396,30 @@ public class MainAppController implements Initializable {
     private void createSongList(){
         if(listSong != null){
             for(int i = 0; i < listSong.getSizeOfList(); i++){
+                folderName.setText(listSong.getFolderName());
                 Label label = new Label();
                 label.setId(String.format("%d",i));
                 label.setText(getSongName() + "\n" + getArtistName());
                 label.setGraphic(getImageView());
-                label.setTextFill(Color.BISQUE);
+                label.setTextFill(Color.WHITE);
+                label.setFont(new Font("Arial",18));
+                label.setPadding(new Insets(0,360,0,0));
+                //--------------------------------------------------------------------------------
                 addEventHandle(label);
                 musicListObservableList.add(label);
                 listSong.nextSong();
                 musicList.setItems(musicListObservableList);
             }
+            musicListObservableList.get(0).setPadding(new Insets(10,360,10,10));
+            musicListObservableList.get(0).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
+
         }
     }
 
+//    =======================================================================================
+
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
-
-
-        //===========================================================
 
         // giá trị biến mute ban đầu không mute
         isMute = false;

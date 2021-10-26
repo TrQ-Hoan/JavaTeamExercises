@@ -22,6 +22,7 @@ public class SongController {
     private List<Integer> listSong_s;
     private int current;
     private DirectoryChooser directoryChooser;
+    private String folderName;
 
     public static SongController instance;
 
@@ -52,10 +53,12 @@ public class SongController {
         try {
             // đổi đường dẫn về dạng file/folder
             File f = new File(dir);
+            folderName = f.getName();
             // lọc ra những file có đuôi mp3 và m4a
             FilenameFilter filter = (File ff, String name) -> (name.endsWith(".mp3") || name.endsWith(".m4a"));
             // đưa các file mp3/m4a vào mảng
             File[] files = f.listFiles(filter);
+
             // nếu mở vào folder không có nhạc
             if (files.length < 1 && listSong.isEmpty()) {
                 return;
@@ -139,11 +142,15 @@ public class SongController {
         return listSong.size();
     }
 
-    public int getCurrent() {
+    public int getCurrentIndex() {
         return current;
     }
 
     public void setCurrent(int current) {
         this.current = current;
+    }
+
+    public String getFolderName(){
+        return folderName;
     }
 }

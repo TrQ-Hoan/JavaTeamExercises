@@ -1,46 +1,37 @@
 
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: #000;
+/*.list-cell:filled:selected:focused, .list-cell:filled:selected {
+
+    -fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);
     -fx-text-fill: white;
     -fx-padding: 10px;
-}
-
+}*/
+/*-fx-background-color: #ff4500;*/
 .list-view{
     -fx-background-color: transparent;
 }
 
 .list-cell:filled {
-    -fx-background-color: #2A324F; /* purple 513E6D -> 2A324F*/
+    -fx-background-color: #222835; /* purple 513E6D -> 2A324F*/
     -fx-text-fill: white;
-    -fx-padding: 0px;
+    -fx-padding: 6px;
 }
 
 .list-cell:empty {
-    -fx-background-color: #2A324F;
+    -fx-background-color: #222835;
     -fx-text-fill: white;
     -fx-padding: 0px;
 }
 
 .list-cell:filled:hover {
-    -fx-background-color: #222835;
+    -fx-background-color: #696969;
     -fx-text-fill: white;
     -fx-padding: 10px;
 }
 
-/*search bar css*/
-.text-input {
-    -fx-text-fill: white;
-    -fx-prompt-text-fill: white;
-}
-.text-input:focused {
-    -fx-highlight-text-fill: white;
-    -fx-prompt-text-fill: white;
-}
-
 /*scroll bar music list*/
 .scroll-bar:vertical .track{
-    -fx-background-color :#2A324F;
-    -fx-border-color :#2A324F;
+    -fx-background-color :#222835;
+    -fx-border-color :#222835;
 }
 
 .scroll-bar:vertical .increment-button ,
