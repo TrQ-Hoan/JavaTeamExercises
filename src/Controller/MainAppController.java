@@ -1,46 +1,26 @@
 package Controller;
 
-
-import Model.Album;
-import Model.Song;
 import com.jfoenix.controls.*;
-import com.jfoenix.controls.events.JFXDrawerEvent;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
-import javafx.beans.Observable;
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -52,12 +32,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 
 /**
  *
@@ -70,6 +46,8 @@ public class MainAppController implements Initializable {
     private boolean isPlay;
     private boolean isShuf;
     private boolean blocked;
+    private boolean click1;
+    private boolean click2;
     private int nuLoop;
     private double currentVolume;
     private MediaPlayer mediaPlayer;
@@ -119,45 +97,43 @@ public class MainAppController implements Initializable {
     @FXML
     private JFXDrawer musicListDrawer;
     @FXML
-    private AnchorPane anchorPane ;
+    private AnchorPane anchorPane;
     @FXML
     private Label folderName;
     @FXML
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
 
+    @FXML
+    private void openSongList() {
+        if (anchorPane.isVisible() == true) {
+            anchorPane.setVisible(false);
+        } else {
+            anchorPane.setVisible(true);
+        }
+    }
 
     @FXML
-    private void openSongList(){
-        if(anchorPane.isVisible() == true){
-            anchorPane.setVisible(false);
-        }
-        else anchorPane.setVisible(true);
-    }
-    @FXML
-    private void closeSongList(){
+    private void closeSongList() {
         anchorPane.setVisible(false);
     }
 
     @FXML
-    private void selected1(){
+    private void selected1() {
         click1 = true;
     }
+
     @FXML
-    private void selected2(){
+    private void selected2() {
         click2 = true;
     }
 
-    private void close(){
-        if(click1 == true && click2 == false){
+    private void close() {
+        if (click1 == true && click2 == false) {
             click2 = click1 = false;
             anchorPane.setVisible(false);
         }
     }
-
-    private boolean click1 = false;
-    private boolean click2 = false;
-
 
     @FXML // thay đổi giữa các chế độ lặp
     void changeLoop(MouseEvent event) {
@@ -207,7 +183,7 @@ public class MainAppController implements Initializable {
         }
         mediaPlayer.stop();
         mediaPlayer.dispose();
-        removeCss();
+        cssSelected();
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
             listSong.nextSong();
@@ -217,7 +193,7 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
-        addCss();
+        cssUnSelected();
         playMedia();
 
     }
@@ -248,7 +224,7 @@ public class MainAppController implements Initializable {
         }
         mediaPlayer.stop();
         mediaPlayer.dispose();
-        removeCss();
+        cssSelected();
 
         if (!isShuf) {
             // nếu đang ở chế độ shuffle
@@ -259,7 +235,7 @@ public class MainAppController implements Initializable {
         }
         curSong = new Media(listSong.getSong().getUri());
         mediaPlayer = new MediaPlayer(curSong);
-        addCss();
+        cssUnSelected();
         playMedia();
     }
 
@@ -339,21 +315,25 @@ public class MainAppController implements Initializable {
     void minimizeApp(MouseEvent event) {
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setIconified(true);
     }
-    // ==============================================================================================
-    //=================================================================================================
 
-    private String getSongName(){
+// ===========================================================================
+    private String getSongName() {
         String songName = listSong.getSong().getTitle();
-        if(songName.isEmpty() || songName == null) return "";
+        if (songName == null || songName.isEmpty()) {
+            return "";
+        }
         return songName;
     }
 
-    private String getArtistName(){
+    private String getArtistName() {
         String artist = listSong.getSong().getArtists();
-        if(artist == null || artist.isEmpty()) return "";
+        if (artist == null || artist.isEmpty()) {
+            return "";
+        }
         return artist;
     }
-    private ImageView getImageView(){
+
+    private ImageView getImageView() {
         ImageView a = new ImageView();
         a.setFitHeight(35);
         a.setFitWidth(35);
@@ -361,18 +341,19 @@ public class MainAppController implements Initializable {
         return a;
     }
 
-    private void removeCss(){
+    private void cssSelected() {
         int index = listSong.getCurrentIndex();
-        musicListObservableList.get(index).setPadding(new Insets(0,360,0,0));
+        musicListObservableList.get(index).setPadding(new Insets(0, 360, 0, 0));
         musicListObservableList.get(index).setStyle("-fx-background-color:none");
     }
 
-    private void addCss(){
+    private void cssUnSelected() {
         int index = listSong.getCurrentIndex();
-        musicListObservableList.get(index).setPadding(new Insets(10,360,10,10));
+        musicListObservableList.get(index).setPadding(new Insets(10, 360, 10, 10));
         musicListObservableList.get(index).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
     }
 
+<<<<<<< HEAD
 //==================================================== click vao bai hat================================================
     private void addEventHandle(Label label){
         EventHandler<MouseEvent> eventHandlerBox =
@@ -390,37 +371,56 @@ public class MainAppController implements Initializable {
                         playMedia();
                     }
                 };
+=======
+// ============================ click vao bai hat ============================
+    private void addEventHandle(Label label) {
+        EventHandler<MouseEvent> eventHandlerBox;
+        eventHandlerBox = (javafx.scene.input.MouseEvent e) -> {
+            mediaPlayer.stop();
+            cssSelected();
+            int index = Integer.parseInt(label.getId());
+            listSong.setCurrent(index);
+            cssUnSelected();
+            curSong = new Media(listSong.getSong().getUri());
+            mediaPlayer = new MediaPlayer(curSong);
+            playMedia();
+            if (isPlay) {
+                mediaPlayer.play();
+            }
+        };
+>>>>>>> 98c3002 (clean)
         label.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandlerBox);
     }
 
-    private void createSongList(){
-        if(listSong != null){
-            for(int i = 0; i < listSong.getSizeOfList(); i++){
+    private void createSongList() {
+        if (listSong != null) {
+            for (int i = 0; i < listSong.getSizeOfList(); i++) {
                 folderName.setText(listSong.getFolderName());
                 Label label = new Label();
-                label.setId(String.format("%d",i));
+                label.setId(String.format("%d", i));
                 label.setText(getSongName() + "\n" + getArtistName());
                 label.setGraphic(getImageView());
                 label.setTextFill(Color.WHITE);
-                label.setFont(new Font("Arial",18));
-                label.setPadding(new Insets(0,360,0,0));
-                //--------------------------------------------------------------------------------
+                label.setFont(new Font("Arial", 18));
+                label.setPadding(new Insets(0, 360, 0, 0));
+                //------------------------------------------------------------
                 addEventHandle(label);
                 musicListObservableList.add(label);
                 listSong.nextSong();
                 musicList.setItems(musicListObservableList);
             }
-            musicListObservableList.get(0).setPadding(new Insets(10,360,10,10));
+            musicListObservableList.get(0).setPadding(new Insets(10, 360, 10, 10));
             musicListObservableList.get(0).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
 
         }
     }
 
-//    =======================================================================================
-
+// ===========================================================================
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
 
+        click1 = false;
+        click2 = false;
         // giá trị biến mute ban đầu không mute
         isMute = false;
         // giá trị biến play ban đầu không play
@@ -582,6 +582,5 @@ public class MainAppController implements Initializable {
             changedLoop();
         });
     }
-
 
 }
