@@ -162,24 +162,19 @@
    </top>
 </BorderPane>
 
-<!--             ================     music List   ====================                      -->
+<!-- ================     music List   ==================== -->
    <AnchorPane fx:id="anchorPane" onMouseClicked="#selected1" style="-fx-background-color: TRANSPARENT;" visible="false">
-      <VBox layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;"  >
+      <VBox id="topbar" layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;" stylesheets="@Style/musicListViewStyle.css">
          <effect>
             <DropShadow color="black" radius="20" height="450" width="380"  />
          </effect>
          <children>
-            <HBox alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #008b8b;">
+             <HBox id="topbar" alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #1D8B8B;" stylesheets="@Style/musicListViewStyle.css">
                <children>
                   <FontAwesomeIconView fill="#000" glyphName="CLOSE" onMouseClicked="#closeSongList" size="25"/>
                   <HBox alignment="CENTER">
                      <children>
-                        <ImageView fitHeight="35.0" fitWidth="85.0"  pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../resource/music logo.jpg" />
-                           </image>
-                        </ImageView>
-                        <Label prefHeight="50.0" prefWidth="100.0" text="Musique" textAlignment="CENTER" textFill="WHITE">
+                        <Label prefHeight="50.0" prefWidth="120.0" text="List Song" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Bold" size="24.0" />
                            </font>
@@ -204,7 +199,7 @@
                   </Label>
                </children>
             </HBox>
-            <ListView fx:id="musicList"  stylesheets="@/StyleCss/musicListViewStyle.css" VBox.vgrow="ALWAYS">
+            <ListView fx:id="musicList"  stylesheets="@Style/musicListViewStyle.css" VBox.vgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
