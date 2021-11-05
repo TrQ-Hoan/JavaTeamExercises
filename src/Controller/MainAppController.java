@@ -126,9 +126,9 @@ public class MainAppController implements Initializable {
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
 
-
+//     ===================== ẩn hiện list nhạc ============================
     @FXML
-    private void openSongList(){
+    private void openSongList(){           // ấn vào 3 vạch để hiện list nhạc
         if(anchorPane.isVisible() == true){
             anchorPane.setVisible(false);
         }
@@ -137,27 +137,24 @@ public class MainAppController implements Initializable {
     @FXML
     private void closeSongList(){
         anchorPane.setVisible(false);
-    }
+    } // ấn vào X để ẩn list nhạc
 
+    //  chọn vào khoảng trống ngoài list nhạc để ẩn list nhạc
+    int select = 1;
     @FXML
     private void selected1(){
-        click1 = true;
+        select *= -1;
+        if(select < 0) {
+            anchorPane.setVisible(false);
+            select = 1;
+        }
     }
     @FXML
     private void selected2(){
-        click2 = true;
+        select *= -1;
     }
 
-    private void close(){
-        if(click1 == true && click2 == false){
-            click2 = click1 = false;
-            anchorPane.setVisible(false);
-        }
-    }
-
-    private boolean click1 = false;
-    private boolean click2 = false;
-
+// =================================================================
 
     @FXML // thay đổi giữa các chế độ lặp
     void changeLoop(MouseEvent event) {
@@ -342,17 +339,21 @@ public class MainAppController implements Initializable {
     // ==============================================================================================
     //=================================================================================================
 
+    // lấy tên bài hát
     private String getSongName(){
         String songName = listSong.getSong().getTitle();
         if(songName.isEmpty() || songName == null) return "";
         return songName;
     }
 
+    // lấy tên ca sĩ
     private String getArtistName(){
         String artist = listSong.getSong().getArtists();
         if(artist == null || artist.isEmpty()) return "";
         return artist;
     }
+
+    // lấy ảnh bài hát
     private ImageView getImageView(){
         ImageView a = new ImageView();
         a.setFitHeight(35);
@@ -361,19 +362,21 @@ public class MainAppController implements Initializable {
         return a;
     }
 
+
     private void removeCss(){
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(0,360,0,0));
         musicListObservableList.get(index).setStyle("-fx-background-color:none");
     }
 
+    // làm nổi bật bài hát đag chạy
     private void addCss(){
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(10,360,10,10));
         musicListObservableList.get(index).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
     }
 
-//==================================================== click vao bai hat================================================
+//==================================================== click vao bai hat ================================================
     private void addEventHandle(Label label){
         EventHandler<MouseEvent> eventHandlerBox =
                 new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -393,6 +396,7 @@ public class MainAppController implements Initializable {
         label.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandlerBox);
     }
 
+    // ================================= khởi tạo list nhạc =======================================
     private void createSongList(){
         if(listSong != null){
             for(int i = 0; i < listSong.getSizeOfList(); i++){
@@ -445,7 +449,7 @@ public class MainAppController implements Initializable {
             curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
-            createSongList();
+            createSongList(); // khởi tạo list nhạc
         } else { // nếu như không có bài hát nào thì vô hiệu hóa một số chức năng
             volumeSlider.setDisable(true);
             blocked = true;
