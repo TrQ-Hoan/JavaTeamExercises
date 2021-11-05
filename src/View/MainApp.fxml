@@ -125,7 +125,9 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
                   <MaterialDesignIconView fx:id="btnMenu" fill="#c9cfe1" glyphName="MENU" onMouseClicked="#openSongList" size="25">
-
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </MaterialDesignIconView>
                </children>
             </HBox>
@@ -164,9 +166,13 @@
 
 <!-- ================     music List   ==================== -->
    <AnchorPane fx:id="anchorPane" onMouseClicked="#selected1" style="-fx-background-color: TRANSPARENT;" visible="false">
+<<<<<<< HEAD
       <VBox id="topbar" layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;" stylesheets="@Style/musicListViewStyle.css">
+=======
+      <VBox layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2"  style="-fx-background-color: #222835;"  >
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
          <effect>
-            <DropShadow color="black" radius="20" height="450" width="380"  />
+            <DropShadow color="black" radius="20" height="20" width="70"  />
          </effect>
          <children>
              <HBox id="topbar" alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #1D8B8B;" stylesheets="@Style/musicListViewStyle.css">
@@ -199,7 +205,11 @@
                   </Label>
                </children>
             </HBox>
+<<<<<<< HEAD
             <ListView fx:id="musicList"  stylesheets="@Style/musicListViewStyle.css" VBox.vgrow="ALWAYS">
+=======
+            <ListView fx:id="musicList"  stylesheets="@/View/Style/musicListViewStyle.css" VBox.vgrow="ALWAYS" HBox.hgrow = "NEVER">
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

@@ -53,3 +53,14 @@
     -fx-background-color :#60CC96;
     -fx-background-radius : 2.0em;
 }
+<<<<<<< HEAD:src/View/Style/musicListViewStyle.css
+=======
+
+.list-view .scroll-bar:horizontal .increment-arrow,
+.list-view .scroll-bar:horizontal .decrement-arrow,
+.list-view .scroll-bar:horizontal .increment-button,
+.list-view .scroll-bar:horizontal .decrement-button {
+    -fx-padding:0;
+}
+
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16:src/StyleCss/musicListViewStyle.css

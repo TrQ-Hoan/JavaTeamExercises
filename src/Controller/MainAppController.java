@@ -104,9 +104,16 @@ public class MainAppController implements Initializable {
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
 
+<<<<<<< HEAD
     @FXML
     private void openSongList() {
         if (anchorPane.isVisible() == true) {
+=======
+//     ===================== ẩn hiện list nhạc ============================
+    @FXML
+    private void openSongList(){           // ấn vào 3 vạch để hiện list nhạc
+        if(anchorPane.isVisible() == true){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
             anchorPane.setVisible(false);
         } else {
             anchorPane.setVisible(true);
@@ -116,14 +123,26 @@ public class MainAppController implements Initializable {
     @FXML
     private void closeSongList() {
         anchorPane.setVisible(false);
-    }
+    } // ấn vào X để ẩn list nhạc
 
+    //  chọn vào khoảng trống ngoài list nhạc để ẩn list nhạc
+    int select = 1;
     @FXML
+<<<<<<< HEAD
     private void selected1() {
         click1 = true;
+=======
+    private void selected1(){
+        select *= -1;
+        if(select < 0) {
+            anchorPane.setVisible(false);
+            select = 1;
+        }
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
     }
 
     @FXML
+<<<<<<< HEAD
     private void selected2() {
         click2 = true;
     }
@@ -134,6 +153,13 @@ public class MainAppController implements Initializable {
             anchorPane.setVisible(false);
         }
     }
+=======
+    private void selected2(){
+        select *= -1;
+    }
+
+// =================================================================
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
 
     @FXML // thay đổi giữa các chế độ lặp
     void changeLoop(MouseEvent event) {
@@ -316,8 +342,13 @@ public class MainAppController implements Initializable {
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
+<<<<<<< HEAD
 // ===========================================================================
     private String getSongName() {
+=======
+    // lấy tên bài hát
+    private String getSongName(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         String songName = listSong.getSong().getTitle();
         if (songName == null || songName.isEmpty()) {
             return "";
@@ -325,7 +356,12 @@ public class MainAppController implements Initializable {
         return songName;
     }
 
+<<<<<<< HEAD
     private String getArtistName() {
+=======
+    // lấy tên ca sĩ
+    private String getArtistName(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         String artist = listSong.getSong().getArtists();
         if (artist == null || artist.isEmpty()) {
             return "";
@@ -333,7 +369,12 @@ public class MainAppController implements Initializable {
         return artist;
     }
 
+<<<<<<< HEAD
     private ImageView getImageView() {
+=======
+    // lấy ảnh bài hát
+    private ImageView getImageView(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         ImageView a = new ImageView();
         a.setFitHeight(35);
         a.setFitWidth(35);
@@ -341,20 +382,34 @@ public class MainAppController implements Initializable {
         return a;
     }
 
+<<<<<<< HEAD
     private void cssSelected() {
+=======
+
+    private void removeCss(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(0, 360, 0, 0));
         musicListObservableList.get(index).setStyle("-fx-background-color:none");
     }
 
+<<<<<<< HEAD
     private void cssUnSelected() {
+=======
+    // làm nổi bật bài hát đag chạy
+    private void addCss(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(10, 360, 10, 10));
         musicListObservableList.get(index).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //==================================================== click vao bai hat================================================
+=======
+//==================================================== click vao bai hat ================================================
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
     private void addEventHandle(Label label){
         EventHandler<MouseEvent> eventHandlerBox =
                 new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -392,9 +447,16 @@ public class MainAppController implements Initializable {
         label.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandlerBox);
     }
 
+<<<<<<< HEAD
     private void createSongList() {
         if (listSong != null) {
             for (int i = 0; i < listSong.getSizeOfList(); i++) {
+=======
+    // ================================= khởi tạo list nhạc =======================================
+    private void createSongList(){
+        if(listSong != null){
+            for(int i = 0; i < listSong.getSizeOfList(); i++){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
                 folderName.setText(listSong.getFolderName());
                 Label label = new Label();
                 label.setId(String.format("%d", i));
@@ -445,7 +507,7 @@ public class MainAppController implements Initializable {
             curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
-            createSongList();
+            createSongList(); // khởi tạo list nhạc
         } else { // nếu như không có bài hát nào thì vô hiệu hóa một số chức năng
             volumeSlider.setDisable(true);
             blocked = true;
