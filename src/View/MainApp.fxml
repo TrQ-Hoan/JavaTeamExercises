@@ -206,7 +206,7 @@
                   </Label>
                </children>
             </HBox>
-            <ListView fx:id="musicList"  stylesheets="@/StyleCss/musicListViewStyle.css" VBox.vgrow="ALWAYS" HBox.hgrow = "NEVER">
+            <ListView fx:id="musicList"  stylesheets="@/View/Style/musicListViewStyle.css" VBox.vgrow="ALWAYS" HBox.hgrow = "NEVER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
