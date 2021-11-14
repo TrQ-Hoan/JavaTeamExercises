@@ -104,6 +104,7 @@ public class MainAppController implements Initializable {
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
 
+// ===================== ẩn hiện list nhạc ============================
     @FXML
     private void openSongList() {
         if (anchorPane.isVisible() == true) {
@@ -118,23 +119,24 @@ public class MainAppController implements Initializable {
         anchorPane.setVisible(false);
     }
 
+    //  chọn vào khoảng trống ngoài list nhạc để ẩn list nhạc
+    private int select = 1;
+
     @FXML
     private void selected1() {
-        click1 = true;
+        select *= -1;
+        if (select < 0) {
+            anchorPane.setVisible(false);
+            select = 1;
+        }
     }
 
     @FXML
     private void selected2() {
-        click2 = true;
+        select *= -1;
     }
 
-    private void close() {
-        if (click1 == true && click2 == false) {
-            click2 = click1 = false;
-            anchorPane.setVisible(false);
-        }
-    }
-
+// =================================================================
     @FXML // thay đổi giữa các chế độ lặp
     void changeLoop(MouseEvent event) {
         switch (nuLoop) {
@@ -445,7 +447,7 @@ public class MainAppController implements Initializable {
             curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
-            createSongList();
+            createSongList(); // khởi tạo list nhạc
         } else { // nếu như không có bài hát nào thì vô hiệu hóa một số chức năng
             volumeSlider.setDisable(true);
             blocked = true;

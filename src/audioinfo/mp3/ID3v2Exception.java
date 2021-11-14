@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ithaka.audioinfo.mp3;
+package audioinfo.mp3;
 
 public class ID3v2Exception extends Exception {
-	private static final long serialVersionUID = 1L;
 
-	public ID3v2Exception(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
+
+    public ID3v2Exception(String message) {
+        super(message);
+    }
 }

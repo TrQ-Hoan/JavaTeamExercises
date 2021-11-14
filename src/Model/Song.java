@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.ithaka.audioinfo.AudioInfo;
-import com.ithaka.audioinfo.mp3.MP3Info;
-import com.ithaka.audioinfo.m4a.M4AInfo;
+import audioinfo.AudioInfo;
+import audioinfo.mp3.MP3Info;
+import audioinfo.m4a.M4AInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -118,7 +118,7 @@ public class Song {
     public Image getCover() {
         return cover;
     }
-    
+
     public Album getAlbum() {
         return album;
     }

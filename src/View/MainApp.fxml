@@ -125,7 +125,9 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="100.0">
                <children>
                   <MaterialDesignIconView fx:id="btnMenu" fill="#c9cfe1" glyphName="MENU" onMouseClicked="#openSongList" size="25">
-
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </MaterialDesignIconView>
                </children>
             </HBox>
@@ -199,7 +201,7 @@
                   </Label>
                </children>
             </HBox>
-            <ListView fx:id="musicList"  stylesheets="@Style/musicListViewStyle.css" VBox.vgrow="ALWAYS">
+            <ListView fx:id="musicList"  stylesheets="@View/Style/musicListViewStyle.css" VBox.vgrow="ALWAYS" HBox.hgrow = "NEVER">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
