@@ -1,11 +1,13 @@
 package Controller;
 
+import Model.Song;
 import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import java.io.File;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -193,7 +195,7 @@ public class MainAppController implements Initializable {
             // nếu tắt chế độ shuffle
             listSong.nextShuffleSong();
         }
-        curSong = new Media(listSong.getSong().getUri());
+        curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
         mediaPlayer = new MediaPlayer(curSong);
         cssUnSelected();
         playMedia();
@@ -235,7 +237,7 @@ public class MainAppController implements Initializable {
             // nếu đang ở chế độ shuffle
             listSong.previousShuffleSong();
         }
-        curSong = new Media(listSong.getSong().getUri());
+        curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
         mediaPlayer = new MediaPlayer(curSong);
         cssUnSelected();
         playMedia();
@@ -250,7 +252,7 @@ public class MainAppController implements Initializable {
         }
         blocked = false;
         volumeSlider.setDisable(false);
-        curSong = new Media(listSong.getSong().getUri());
+        curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
         mediaPlayer = new MediaPlayer(curSong);
         playMedia();
     }
@@ -310,6 +312,7 @@ public class MainAppController implements Initializable {
 
     @FXML // đóng ứng dụng
     void closeApp(MouseEvent event) {
+        DBConnection.closeConnection();
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).close();
     }
 
@@ -319,30 +322,6 @@ public class MainAppController implements Initializable {
     }
 
 // ===========================================================================
-    private String getSongName() {
-        String songName = listSong.getSong().getTitle();
-        if (songName == null || songName.isEmpty()) {
-            return "";
-        }
-        return songName;
-    }
-
-    private String getArtistName() {
-        String artist = listSong.getSong().getArtists();
-        if (artist == null || artist.isEmpty()) {
-            return "";
-        }
-        return artist;
-    }
-
-    private ImageView getImageView() {
-        ImageView a = new ImageView();
-        a.setFitHeight(35);
-        a.setFitWidth(35);
-        a.setImage((listSong.getSong().getCover()) == null ? baseImage : listSong.getSong().getCover());
-        return a;
-    }
-
     private void cssSelected() {
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(0, 360, 0, 0));
@@ -383,7 +362,7 @@ public class MainAppController implements Initializable {
             int index = Integer.parseInt(label.getId());
             listSong.setCurrent(index);
             cssUnSelected();
-            curSong = new Media(listSong.getSong().getUri());
+            curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
             mediaPlayer = new MediaPlayer(curSong);
             playMedia();
             if (isPlay) {
@@ -395,13 +374,22 @@ public class MainAppController implements Initializable {
     }
 
     private void createSongList() {
+        ImageView imageView;
         if (listSong != null) {
             for (int i = 0; i < listSong.getSizeOfList(); i++) {
+                imageView = new ImageView();
+//                imageView.setFitHeight(35);
+//                imageView.setFitWidth(35);
+//                imageView.setPreserveRatio(true);
+                imageView.setImage(listSong.hasSongCover() ? baseImage : listSong.getSongCover());
                 folderName.setText(listSong.getFolderName());
                 Label label = new Label();
                 label.setId(String.format("%d", i));
-                label.setText(getSongName() + "\n" + getArtistName());
-                label.setGraphic(getImageView());
+                label.setText(
+                        listSong.getSongInfo("songTitle") + "\n"
+                        + listSong.getSongInfo("artistsName")
+                );
+                label.setGraphic(imageView);
                 label.setTextFill(Color.WHITE);
                 label.setFont(new Font("Arial", 18));
                 label.setPadding(new Insets(0, 360, 0, 0));
@@ -444,7 +432,7 @@ public class MainAppController implements Initializable {
         // khởi tạo một SongController
         listSong = new SongController();
         if (!listSong.isEmpty()) { // nếu như trong SongController có bài hát
-            curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
+            curSong = new Media(new File(listSong.getSongPath()).toURI().toString()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
             createSongList(); // khởi tạo list nhạc
@@ -537,10 +525,11 @@ public class MainAppController implements Initializable {
         mediaPlayer.statusProperty().addListener((observableValue, oldStatus, newStatus) -> {
             if (newStatus == MediaPlayer.Status.READY) { // nếu như mediaPlayer đã sẵn sàng
                 timeSlider.setMax(mediaPlayer.getTotalDuration().toSeconds()); // gán thời gian lớn nhất vào thanh trượt thời gian
-                titleSong.setText(listSong.getSong().getTitle()); // hiển thị tên bài hát
-                artistSong.setText(listSong.getSong().getArtists()); // hiển thị tên ca sĩ
+                Song currentSong = new Song("", listSong.getSongPath());
+                titleSong.setText(currentSong.getTitle()); // hiển thị tên bài hát
+                artistSong.setText(currentSong.getArtists()); // hiển thị tên ca sĩ
                 // nếu như trong file bài hát không có ảnh cover thì lấy ảnh mặc định
-                imageSong.setImage((Image) listSong.getSong().getCover() != null ? listSong.getSong().getCover() : baseImage);
+                imageSong.setImage((Image) currentSong.getCover() != null ? currentSong.getCover() : baseImage);
                 // đặt thời gian max là thời gian của bài hát
                 totalTime.setText(String.format("%02d:%02d", (int) timeSlider.getMax() / 60, (int) timeSlider.getMax() % 60));
             }
