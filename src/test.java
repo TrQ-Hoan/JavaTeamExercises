@@ -1,1 +1,0 @@
-//<DropShadow color="black" radius="20" height="450" width="380"  />
