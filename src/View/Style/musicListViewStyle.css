@@ -61,3 +61,13 @@
     -fx-padding:0;
 }
 
+/*search bar css*/
+.text-input {
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: white;
+}
+.text-input:focused {
+    -fx-highlight-text-fill: white;
+    -fx-prompt-text-fill: white;
+}
+

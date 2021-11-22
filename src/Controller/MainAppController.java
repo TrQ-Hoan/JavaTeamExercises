@@ -10,7 +10,9 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import java.io.File;
 
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,11 +99,9 @@ public class MainAppController implements Initializable {
     private Label totalTime;
 
     @FXML
-    private JFXDrawer musicListDrawer;
+    private JFXTextField searchBar;
     @FXML
     private AnchorPane anchorPane;
-    @FXML
-    private Label folderName;
     @FXML
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
@@ -335,6 +335,7 @@ public class MainAppController implements Initializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //==================================================== click vao bai hat================================================
     private void addEventHandle(Label label){
         EventHandler<MouseEvent> eventHandlerBox =
@@ -353,6 +354,50 @@ public class MainAppController implements Initializable {
                     }
                 };
 =======
+=======
+    // ================================= Tìm kiếm bài hát =========================================
+    @FXML
+    private void searchSong() {
+        String s = removeAccent(searchBar.getText());
+        if (s.isEmpty() || s.length() < 2) {
+            musicList.setItems(musicListObservableList);
+            return;
+        }
+        ObservableList<Label> newObservableList = FXCollections.observableArrayList();
+        boolean exist = false;
+        for (Label a : musicListObservableList) {
+            String str = getNameOfSong(a);
+            if (str.contains(s)) {
+                newObservableList.add(a);
+                exist = true;
+            }
+        }
+        if (exist) {
+            musicList.setItems(newObservableList);
+        }
+    }
+
+    // lấy tên bài hát từ label
+    private String getNameOfSong(Label label) {
+        String str = "";
+        String tach[] = label.getText().toLowerCase().split("");
+        for (String k : tach) {
+            if (k.compareTo("\n") == 0) {
+                break;
+            }
+            str = str + k;
+        }
+        return removeAccent(str);
+    }
+
+    // hàm chuyển đổi chữ có dấu thành ko dấu
+    public static String removeAccent(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
+    }
+
+>>>>>>> 1457561 (search merge from thang/dev not working)
 // ============================ click vao bai hat ============================
     private void addEventHandle(Label label) {
         EventHandler<MouseEvent> eventHandlerBox;
@@ -378,11 +423,10 @@ public class MainAppController implements Initializable {
         if (listSong != null) {
             for (int i = 0; i < listSong.getSizeOfList(); i++) {
                 imageView = new ImageView();
-//                imageView.setFitHeight(35);
-//                imageView.setFitWidth(35);
-//                imageView.setPreserveRatio(true);
+                imageView.setFitHeight(35);
+                imageView.setFitWidth(35);
+                imageView.setPreserveRatio(true);
                 imageView.setImage(listSong.hasSongCover() ? baseImage : listSong.getSongCover());
-                folderName.setText(listSong.getFolderName());
                 Label label = new Label();
                 label.setId(String.format("%d", i));
                 label.setText(
@@ -399,9 +443,6 @@ public class MainAppController implements Initializable {
                 listSong.nextSong();
                 musicList.setItems(musicListObservableList);
             }
-            musicListObservableList.get(0).setPadding(new Insets(10, 360, 10, 10));
-            musicListObservableList.get(0).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
-
         }
     }
 
@@ -409,8 +450,6 @@ public class MainAppController implements Initializable {
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
 
-        click1 = false;
-        click2 = false;
         // giá trị biến mute ban đầu không mute
         isMute = false;
         // giá trị biến play ban đầu không play

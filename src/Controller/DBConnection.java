@@ -82,7 +82,7 @@ public class DBConnection {
 
     public static void updateMusicList(ArrayList<String> songIdList, HashMap<String, String> songPathMap) {
         try {
-            ResultSet rs = stmt.executeQuery("Select * from MUSICLIST");
+            ResultSet rs = stmt.executeQuery("Select MUSICLIST.* from MUSICLIST, SONGS WHERE MUSICLIST.songId = SONGS.songId ORDER BY SONGS.songTitle;");
             String songId;
             while (rs.next()) {
                 songId = rs.getString("songId");
