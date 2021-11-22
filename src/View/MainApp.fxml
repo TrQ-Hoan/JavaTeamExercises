@@ -1,40 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
-<?import com.jfoenix.controls.JFXHamburger?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.ImageCursor?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TextField?>
 
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.effect.Shadow?>
-<?import com.jfoenix.controls.JFXButton?>
 <StackPane style="-fx-background-radius: 7.0 7.0 7.0 7.0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
 
-<BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" >
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;">
 
    <center>
-      <JFXDrawer style="-fx-background-color: #222835;"  BorderPane.alignment="CENTER" >
+      <JFXDrawer style="-fx-background-color: #222835;" BorderPane.alignment="CENTER">
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -167,14 +161,14 @@
 
 <!-- ================     music List   ==================== -->
    <AnchorPane fx:id="anchorPane" onMouseClicked="#selected1" style="-fx-background-color: TRANSPARENT;" visible="false">
-      <VBox id="topbar" layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;" stylesheets="@Style/musicListViewStyle.css">
+      <VBox id="topbar" alignment="TOP_CENTER" layoutX="220" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#selected2" prefHeight="462" prefWidth="380" style="-fx-background-color: #222835;" stylesheets="@Style/musicListViewStyle.css">
          <effect>
-            <DropShadow color="black" radius="20" height="450" width="380"  />
+            <DropShadow color="black" height="450" radius="20" width="380" />
          </effect>
          <children>
              <HBox id="topbar" alignment="CENTER" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: #1D8B8B;" stylesheets="@Style/musicListViewStyle.css">
                <children>
-                  <FontAwesomeIconView fill="#000" glyphName="CLOSE" onMouseClicked="#closeSongList" size="25"/>
+                  <FontAwesomeIconView fill="#000" glyphName="CLOSE" onMouseClicked="#closeSongList" size="25" />
                   <HBox alignment="CENTER">
                      <children>
                         <Label prefHeight="50.0" prefWidth="120.0" text="List Song" textAlignment="CENTER" textFill="WHITE">
@@ -197,15 +191,15 @@
                <children>
 <!--              ====================================== search bar ========================================================= -->
                   <HBox>
-                     <JFXTextField fx:id="searchBar" focusColor="WHITE" stylesheets="@Style/musicListViewStyle.css" prefHeight="44.0" prefWidth="240.0" promptText="Search song" unFocusColor="WHITE">
+                     <JFXTextField fx:id="searchBar" focusColor="WHITE" onKeyPressed="#pressedReturn" prefHeight="44.0" prefWidth="240.0" promptText="Search song" stylesheets="@Style/musicListViewStyle.css" unFocusColor="WHITE">
                      <font>
-                           <Font name="Segoe UI Bold" size="18.0"/>
+                           <Font name="Segoe UI Bold" size="18.0" />
                      </font>
                         <HBox.margin>
                            <Insets right="15.0" />
                         </HBox.margin>
                      </JFXTextField>
-                     <JFXButton onMouseClicked="#searchSong" text="search" prefWidth="100" prefHeight="44" style="-fx-background-color: #cccccccc;">
+                     <JFXButton onMouseClicked="#searchSong" prefHeight="44" prefWidth="100" style="-fx-background-color: #cccccccc;" text="search">
                         <font>
                            <Font name="Segoe UI" size="16.0" />
                         </font>
@@ -213,7 +207,7 @@
                   </HBox>
                </children>
             </HBox>
-            <ListView fx:id="musicList"  stylesheets="@Style/musicListViewStyle.css" VBox.vgrow="ALWAYS" HBox.hgrow = "NEVER">
+            <ListView fx:id="musicList" stylesheets="@Style/musicListViewStyle.css" HBox.hgrow="NEVER" VBox.vgrow="ALWAYS">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>

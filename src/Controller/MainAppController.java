@@ -29,6 +29,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioSpectrumListener;
@@ -357,9 +359,26 @@ public class MainAppController implements Initializable {
 =======
     // ================================= Tìm kiếm bài hát =========================================
     @FXML
+    void pressedReturn(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            searchSong();
+        }
+        if (event.getCode().equals(KeyCode.BACK_SPACE) // khi bấm phím xoá
+                && searchBar.getText().length() == 1 // còn 1 kí tự
+                && searchBar.getCaretPosition() == 1) { // con trỏ bên phải kí tự
+            musicList.setItems(musicListObservableList);
+        }
+        if (event.getCode().equals(KeyCode.DELETE) // khi bấm phím delete
+                && searchBar.getText().length() == 1 // còn 1 kí tự
+                && searchBar.getCaretPosition() == 0) { // con trỏ bên trái kí tự
+            musicList.setItems(musicListObservableList);
+        }
+    }
+
+    @FXML
     private void searchSong() {
-        String s = removeAccent(searchBar.getText().toLowerCase());
-        if (s.isEmpty() || s.length() < 2) {
+        String s = removeAccent(searchBar.getText().trim().toLowerCase().replaceAll("\\s++", " "));
+        if (s.isEmpty()) {
             musicList.setItems(musicListObservableList);
             return;
         }
@@ -373,6 +392,8 @@ public class MainAppController implements Initializable {
             }
         }
         if (exist) {
+            musicList.setItems(newObservableList);
+        } else {
             musicList.setItems(newObservableList);
         }
     }
@@ -397,8 +418,12 @@ public class MainAppController implements Initializable {
         return pattern.matcher(temp).replaceAll("");
     }
 
+<<<<<<< HEAD
 >>>>>>> 1457561 (search merge from thang/dev not working)
 // ============================ click vao bai hat ============================
+=======
+// ============================ click vào bài hát ============================
+>>>>>>> 9a72720 (fix search & DB)
     private void addEventHandle(Label label) {
         EventHandler<MouseEvent> eventHandlerBox;
         eventHandlerBox = (javafx.scene.input.MouseEvent e) -> {

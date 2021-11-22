@@ -43,16 +43,30 @@ public class DBConnection {
         } catch (SQLException e) {
         }
     }
-    
-    public static boolean hasDB(){
+
+    public static boolean hasDB() {
         try {
             ResultSet rs = stmt.executeQuery("Select * from MUSICLIST");
-            int cnt = 0;
+            int cnt = 0, lsCnt = 0;
+            File f;
+            String sql = "DELETE FROM MUSICLIST WHERE songId = ?;";
+            ArrayList<String> id = new ArrayList<>();
             while (rs.next()) {
+                f = new File(rs.getString("songPath"));
                 cnt++;
-                if(cnt > 0) break;
+                if (f.exists()) {
+                    lsCnt++;
+                } else {
+                    id.add(rs.getString("songId"));
+                }
             }
-            return cnt != 0;
+            for (String iid : id) {
+                try (PreparedStatement prstmt = connection.prepareStatement(sql)) {
+                    prstmt.setString(1, iid);
+                    prstmt.executeUpdate();
+                }
+            }
+            return lsCnt != 0;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
@@ -164,7 +178,7 @@ public class DBConnection {
 
     public static void dropTable() {
         try {
-            String sql = "Drop table if exists musicList;";
+            String sql = "Drop table if exists MUSICLIST;";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
