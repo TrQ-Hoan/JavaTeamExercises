@@ -8,7 +8,19 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 
 import java.net.URL;
+<<<<<<< HEAD
 import java.util.ResourceBundle;
+=======
+import java.text.Normalizer;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.beans.Observable;
+>>>>>>> 620da82 (upload file)
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,10 +33,17 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+<<<<<<< HEAD
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+=======
+import javafx.scene.control.*;
+>>>>>>> 620da82 (upload file)
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioSpectrumListener;
@@ -95,11 +114,9 @@ public class MainAppController implements Initializable {
     private Label totalTime;
 
     @FXML
-    private JFXDrawer musicListDrawer;
+    private JFXTextField searchBar;
     @FXML
     private AnchorPane anchorPane;
-    @FXML
-    private Label folderName;
     @FXML
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
@@ -235,6 +252,7 @@ public class MainAppController implements Initializable {
         btnPlay.setIcon(isPlay ? FontAwesomeIcon.PAUSE : FontAwesomeIcon.PLAY);
         if (isPlay) {
             mediaPlayer.play();
+            addCss();
             if (!bc.isVisible()) {
                 bc.setVisible(true);
             }
@@ -343,10 +361,14 @@ public class MainAppController implements Initializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // ===========================================================================
     private String getSongName() {
 =======
     // lấy tên bài hát
+=======
+    // lấy tên bài hát từ listSong
+>>>>>>> 620da82 (upload file)
     private String getSongName(){
 >>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         String songName = listSong.getSong().getTitle();
@@ -357,9 +379,13 @@ public class MainAppController implements Initializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private String getArtistName() {
 =======
     // lấy tên ca sĩ
+=======
+    // lấy tên ca sĩ từ listSong
+>>>>>>> 620da82 (upload file)
     private String getArtistName(){
 >>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         String artist = listSong.getSong().getArtists();
@@ -370,9 +396,13 @@ public class MainAppController implements Initializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private ImageView getImageView() {
 =======
     // lấy ảnh bài hát
+=======
+    // lấy ảnh bài hát từ listSong
+>>>>>>> 620da82 (upload file)
     private ImageView getImageView(){
 >>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
         ImageView a = new ImageView();
@@ -406,8 +436,51 @@ public class MainAppController implements Initializable {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 //==================================================== click vao bai hat================================================
 =======
+=======
+    // ================================= Tìm kiếm bài hát =========================================
+    @FXML
+    private void searchSong(){
+        String s = removeAccent(searchBar.getText());
+        if(s.isEmpty() || s.length() < 2) {
+            musicList.setItems(musicListObservableList);
+            return;
+        }
+        ObservableList<Label> newObservableList = FXCollections.observableArrayList();
+        boolean exist = false;
+        for(Label a : musicListObservableList){
+            String str = getNameOfSong(a);
+            if(str.contains(s) ) {
+                System.out.println(str);
+                newObservableList.add(a);
+                exist = true;
+            }
+        }
+        if(exist){
+            musicList.setItems(newObservableList);
+        }
+
+    }
+    // lấy tên bài hát từ label
+    private String getNameOfSong(Label label){
+        String str = "";
+        String tach[] = label.getText().toLowerCase(Locale.ROOT).split("");
+        for(String k : tach){
+            if(k.compareTo("\n") == 0) break;
+            str = str + k;
+        }
+        return removeAccent(str);
+    }
+    // hàm chuyển đổi chữ có dấu thành ko dấu
+    public static String removeAccent(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
+    }
+
+>>>>>>> 620da82 (upload file)
 //==================================================== click vao bai hat ================================================
 >>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
     private void addEventHandle(Label label){
@@ -448,16 +521,25 @@ public class MainAppController implements Initializable {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     private void createSongList() {
         if (listSong != null) {
             for (int i = 0; i < listSong.getSizeOfList(); i++) {
 =======
+=======
+>>>>>>> 620da82 (upload file)
     // ================================= khởi tạo list nhạc =======================================
+=======
+    // Tạo ds bài hát
+>>>>>>> 12ae346 (update file)
     private void createSongList(){
         if(listSong != null){
             for(int i = 0; i < listSong.getSizeOfList(); i++){
+<<<<<<< HEAD
 >>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
                 folderName.setText(listSong.getFolderName());
+=======
+>>>>>>> 620da82 (upload file)
                 Label label = new Label();
                 label.setId(String.format("%d", i));
                 label.setText(getSongName() + "\n" + getArtistName());
@@ -469,11 +551,14 @@ public class MainAppController implements Initializable {
                 addEventHandle(label);
                 musicListObservableList.add(label);
                 listSong.nextSong();
-                musicList.setItems(musicListObservableList);
             }
+<<<<<<< HEAD
             musicListObservableList.get(0).setPadding(new Insets(10, 360, 10, 10));
             musicListObservableList.get(0).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
 
+=======
+            musicList.setItems(musicListObservableList);
+>>>>>>> 620da82 (upload file)
         }
     }
 
@@ -481,8 +566,13 @@ public class MainAppController implements Initializable {
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
 
+<<<<<<< HEAD
         click1 = false;
         click2 = false;
+=======
+
+
+>>>>>>> 620da82 (upload file)
         // giá trị biến mute ban đầu không mute
         isMute = false;
         // giá trị biến play ban đầu không play

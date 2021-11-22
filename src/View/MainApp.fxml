@@ -28,6 +28,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.effect.Shadow?>
+<?import com.jfoenix.controls.JFXButton?>
 <StackPane style="-fx-background-radius: 7.0 7.0 7.0 7.0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MainAppController">
 
 <BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#dragged" onMousePressed="#pressed" prefHeight="562.0" prefWidth="600.0" style="-fx-background-color: transparent;" >
@@ -164,7 +165,11 @@
    </top>
 </BorderPane>
 
+<<<<<<< HEAD
 <!-- ================     music List   ==================== -->
+=======
+<!--             ==================================== MUSIC LIST ==================================================== -->
+>>>>>>> 620da82 (upload file)
    <AnchorPane fx:id="anchorPane" onMouseClicked="#selected1" style="-fx-background-color: TRANSPARENT;" visible="false">
 <<<<<<< HEAD
       <VBox id="topbar" layoutX="220" prefWidth="380" prefHeight="462" alignment="TOP_CENTER" onMouseClicked="#selected2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #222835;" stylesheets="@Style/musicListViewStyle.css">
@@ -198,11 +203,22 @@
                   <Insets bottom="15.0" left="50.0" right="40.0" top="5.0" />
                </VBox.margin>
                <children>
-                  <Label fx:id="folderName" alignment="CENTER" prefHeight="50.0" prefWidth="240.0" textFill="cyan">
-                     <font>
-                        <Font name="Segoe UI Bold" size="20.0" />
-                     </font>
-                  </Label>
+<!--              ====================================== search bar ========================================================= -->
+                  <HBox>
+                     <JFXTextField fx:id="searchBar" focusColor="WHITE" stylesheets="@/View/Style/musicListViewStyle.css" prefHeight="44.0" prefWidth="240.0" promptText="Search song" unFocusColor="WHITE">
+                        <font>
+                           <Font name="Segoe UI Bold" size="18.0" />
+                        </font>
+                        <HBox.margin>
+                           <Insets right="15.0" />
+                        </HBox.margin>
+                     </JFXTextField>
+                     <JFXButton onMouseClicked="#searchSong" text="search" prefWidth="100" prefHeight="44" style="-fx-background-color: #ccc;">
+                        <font>
+                           <Font name="Segoe UI" size="16.0" />
+                        </font>
+                     </JFXButton>
+                  </HBox>
                </children>
             </HBox>
 <<<<<<< HEAD
