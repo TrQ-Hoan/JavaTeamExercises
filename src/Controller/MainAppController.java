@@ -358,7 +358,7 @@ public class MainAppController implements Initializable {
     // ================================= Tìm kiếm bài hát =========================================
     @FXML
     private void searchSong() {
-        String s = removeAccent(searchBar.getText());
+        String s = removeAccent(searchBar.getText().toLowerCase());
         if (s.isEmpty() || s.length() < 2) {
             musicList.setItems(musicListObservableList);
             return;
