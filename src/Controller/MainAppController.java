@@ -453,7 +453,6 @@ public class MainAppController implements Initializable {
         for(Label a : musicListObservableList){
             String str = getNameOfSong(a);
             if(str.contains(s) ) {
-                System.out.println(str);
                 newObservableList.add(a);
                 exist = true;
             }
@@ -522,16 +521,22 @@ public class MainAppController implements Initializable {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     private void createSongList() {
         if (listSong != null) {
             for (int i = 0; i < listSong.getSizeOfList(); i++) {
 =======
 =======
 >>>>>>> 620da82 (upload file)
+=======
+>>>>>>> 1bd7b33 (sort songlist)
     // ================================= khởi tạo list nhạc =======================================
 =======
     // Tạo ds bài hát
 >>>>>>> 12ae346 (update file)
+=======
+    // ============================================= Tạo ds bài hát ===========================================
+>>>>>>> f8dc02c (sort songlist)
     private void createSongList(){
         if(listSong != null){
             for(int i = 0; i < listSong.getSizeOfList(); i++){
@@ -545,9 +550,14 @@ public class MainAppController implements Initializable {
                 label.setText(getSongName() + "\n" + getArtistName());
                 label.setGraphic(getImageView());
                 label.setTextFill(Color.WHITE);
+<<<<<<< HEAD
                 label.setFont(new Font("Arial", 18));
                 label.setPadding(new Insets(0, 360, 0, 0));
                 //------------------------------------------------------------
+=======
+                label.setFont(new Font("Arial",18));
+                label.setPadding(new Insets(0,360,0,0));
+>>>>>>> 1bd7b33 (sort songlist)
                 addEventHandle(label);
                 musicListObservableList.add(label);
                 listSong.nextSong();
@@ -562,7 +572,12 @@ public class MainAppController implements Initializable {
         }
     }
 
+<<<<<<< HEAD
 // ===========================================================================
+=======
+//    ========================================================================================================================
+
+>>>>>>> 1bd7b33 (sort songlist)
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -594,6 +609,7 @@ public class MainAppController implements Initializable {
         // khởi tạo một SongController
         listSong = new SongController();
         if (!listSong.isEmpty()) { // nếu như trong SongController có bài hát
+            listSong.sortSongList();
             curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa

@@ -3,10 +3,7 @@ package Controller;
 import Model.Song;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import javafx.stage.DirectoryChooser;
@@ -150,7 +147,12 @@ public class SongController {
         this.current = current;
     }
 
-    public String getFolderName(){
-        return folderName;
+    public void sortSongList(){
+        Collections.sort(listSong, new Comparator<Song>() {
+            @Override
+            public int compare(Song a, Song b) {
+                return a.getTitle().toLowerCase(Locale.ROOT).compareTo(b.getTitle().toLowerCase(Locale.ROOT));
+            }
+        });
     }
 }
