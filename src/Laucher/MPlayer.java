@@ -1,5 +1,6 @@
 package Laucher;
 
+import Controller.DBConnection;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,8 @@ public class MPlayer extends Application {
 
     @Override
     public void start(Stage stage) {
+        DBConnection.createConnection("Database");
+        DBConnection.createTable();
         Parent root = null;
         FXMLLoader loader = null;
         if (OS.startsWith("Windows")) {

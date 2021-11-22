@@ -13,30 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.ithaka.audioinfo.mp3;
+package audioinfo.mp3;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+public class MP3Exception extends Exception {
 
-public enum ID3v2Encoding {
-	ISO_8859_1(StandardCharsets.ISO_8859_1, 1),
-	UTF_16(StandardCharsets.UTF_16, 2),
-	UTF_16BE(StandardCharsets.UTF_16BE, 2),
-	UTF_8(StandardCharsets.UTF_8, 1);
-	
-	private final Charset charset;
-	private final int zeroBytes;
-	
-	private ID3v2Encoding(Charset charset, int zeroBytes) {
-		this.charset = charset;
-		this.zeroBytes = zeroBytes;
-	}
-	
-	public Charset getCharset() {
-		return charset;
-	}
-	
-	public int getZeroBytes() {
-		return zeroBytes;
-	}
+    private static final long serialVersionUID = 1L;
+
+    public MP3Exception(String message) {
+        super(message);
+    }
 }

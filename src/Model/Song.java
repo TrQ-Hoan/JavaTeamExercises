@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.ithaka.audioinfo.AudioInfo;
-import com.ithaka.audioinfo.mp3.MP3Info;
-import com.ithaka.audioinfo.m4a.M4AInfo;
+import audioinfo.AudioInfo;
+import audioinfo.mp3.MP3Info;
+import audioinfo.m4a.M4AInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -24,17 +24,28 @@ import javax.imageio.ImageIO;
 public class Song {
 
     private String path;
-    private String uri;
     private String fileName;
     private String title;
     private List<Artist> artists;
     private Album album;
     private String genre;
     private Image cover;
+    private byte [] coverByte;
 
+    public Song(String s, String path) {
+        this.path = path;
+        String[] _path = path.split("/");
+        this.fileName = _path[_path.length - 1];
+        getInfo();
+    }
+    
     public Song(String s, String directory, String fileName) {
         this.path = directory + fileName;
         this.fileName = fileName;
+        getInfo();
+    }
+
+    private void getInfo(){
         if (this.fileName.endsWith(".mp3") || this.fileName.endsWith(".m4a")) {
             try (InputStream input = new BufferedInputStream(new FileInputStream(path))) {
                 AudioInfo song;
@@ -44,7 +55,6 @@ public class Song {
                 } else {
                     song = new M4AInfo(input);
                 }
-                this.uri = new File(path).toURI().toString();
                 String title_ = song.getTitle();
                 String genre_ = song.getGenre();
                 this.title = title_ != null ? title_ : formatName();
@@ -53,18 +63,17 @@ public class Song {
                 this.genre = genre_ == null ? "" : genre_;
                 boolean validCover = song.getCover() != null;
                 if (validCover) {
-                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(song.getCover()));
+                    coverByte = song.getCover();
+                    BufferedImage image = ImageIO.read(new ByteArrayInputStream(coverByte));
                     this.cover = SwingFXUtils.toFXImage(image, null);
                     image.flush(); // clear buffer
                 }
-                //System.out.printf("Track:  %s\n", song.getTrack());
-                //System.out.printf("Year:   %s\n\n", song.getYear());
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         }
     }
-
+    
     private void setArtists(String sArtist) {
         if (sArtist != null) {
             String[] artist = sArtist.split("[,;]\\s*");
@@ -102,10 +111,14 @@ public class Song {
                 + "\n\tGenre:\t\t" + genre;
     }
 
+    public byte[] getCoverByte() {
+        return coverByte;
+    }
+
     public String getPath() {
         return path;
     }
-
+    
     public String getTitle() {
         return title;
     }
@@ -118,16 +131,12 @@ public class Song {
     public Image getCover() {
         return cover;
     }
-    
+
     public Album getAlbum() {
         return album;
     }
 
     public String getGenre() {
         return genre;
-    }
-
-    public String getUri() {
-        return uri;
     }
 }
