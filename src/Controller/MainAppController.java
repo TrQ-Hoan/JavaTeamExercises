@@ -1,6 +1,9 @@
 package Controller;
 
+<<<<<<< HEAD
+=======
 import Model.Song;
+>>>>>>> hoan1
 import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -10,9 +13,26 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import java.io.File;
 
 import java.net.URL;
+<<<<<<< HEAD
+<<<<<<< HEAD
+import java.util.ResourceBundle;
+=======
 import java.text.Normalizer;
+import java.util.*;
+import java.util.regex.Pattern;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.beans.Observable;
+>>>>>>> 620da82 (upload file)
+=======
+import java.text.Normalizer;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+>>>>>>> hoan1
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,11 +45,22 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> hoan1
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+=======
+import javafx.scene.control.*;
+>>>>>>> 620da82 (upload file)
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+<<<<<<< HEAD
+=======
+import javafx.scene.input.KeyCodeCombination;
+>>>>>>> thang1
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -52,8 +83,6 @@ public class MainAppController implements Initializable {
     private boolean isPlay;
     private boolean isShuf;
     private boolean blocked;
-    private boolean click1;
-    private boolean click2;
     private int nuLoop;
     private double currentVolume;
     private MediaPlayer mediaPlayer;
@@ -108,10 +137,23 @@ public class MainAppController implements Initializable {
     private ListView<Label> musicList;
     ObservableList<Label> musicListObservableList = FXCollections.observableArrayList();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+    @FXML
+    private void openSongList() {
+        if (anchorPane.isVisible() == true) {
+=======
+//     ===================== ẩn hiện list nhạc ============================
+    @FXML
+    private void openSongList(){           // ấn vào 3 vạch để hiện list nhạc
+        if(anchorPane.isVisible() == true){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+=======
 // ===================== ẩn hiện list nhạc ============================
     @FXML
     private void openSongList() {
         if (anchorPane.isVisible() == true) {
+>>>>>>> hoan1
             anchorPane.setVisible(false);
         } else {
             anchorPane.setVisible(true);
@@ -121,24 +163,60 @@ public class MainAppController implements Initializable {
     @FXML
     private void closeSongList() {
         anchorPane.setVisible(false);
-    }
+    } // ấn vào X để ẩn list nhạc
 
     //  chọn vào khoảng trống ngoài list nhạc để ẩn list nhạc
+<<<<<<< HEAD
+    int select = 1;
+    @FXML
+<<<<<<< HEAD
+    private void selected1() {
+        click1 = true;
+=======
+    private void selected1(){
+        select *= -1;
+        if(select < 0) {
+            anchorPane.setVisible(false);
+            select = 1;
+        }
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+    }
+
+    @FXML
+<<<<<<< HEAD
+    private void selected2() {
+        click2 = true;
+    }
+
+    private void close() {
+        if (click1 == true && click2 == false) {
+            click2 = click1 = false;
+=======
     private int select = 1;
 
     @FXML
     private void selected1() {
         select *= -1;
         if (select < 0) {
+>>>>>>> hoan1
             anchorPane.setVisible(false);
             select = 1;
         }
     }
+=======
+    private void selected2(){
+        select *= -1;
+    }
 
+<<<<<<< HEAD
+// =================================================================
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+=======
     @FXML
     private void selected2() {
         select *= -1;
     }
+>>>>>>> hoan1
 
 // =================================================================
     @FXML // thay đổi giữa các chế độ lặp
@@ -215,6 +293,7 @@ public class MainAppController implements Initializable {
         btnPlay.setIcon(isPlay ? FontAwesomeIcon.PAUSE : FontAwesomeIcon.PLAY);
         if (isPlay) {
             mediaPlayer.play();
+            addCss();
             if (!bc.isVisible()) {
                 bc.setVisible(true);
             }
@@ -322,15 +401,86 @@ public class MainAppController implements Initializable {
     void minimizeApp(MouseEvent event) {
         ((Stage) ((Node) event.getSource()).getScene().getWindow()).setIconified(true);
     }
+<<<<<<< HEAD
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+// ===========================================================================
+    private String getSongName() {
+=======
+    // lấy tên bài hát
+=======
+    // lấy tên bài hát từ listSong
+>>>>>>> 620da82 (upload file)
+    private String getSongName(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+        String songName = listSong.getSong().getTitle();
+        if (songName == null || songName.isEmpty()) {
+            return "";
+        }
+        return songName;
+    }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private String getArtistName() {
+=======
+    // lấy tên ca sĩ
+=======
+    // lấy tên ca sĩ từ listSong
+>>>>>>> 620da82 (upload file)
+    private String getArtistName(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+        String artist = listSong.getSong().getArtists();
+        if (artist == null || artist.isEmpty()) {
+            return "";
+        }
+        return artist;
+    }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private ImageView getImageView() {
+=======
+    // lấy ảnh bài hát
+=======
+    // lấy ảnh bài hát từ listSong
+>>>>>>> 620da82 (upload file)
+    private ImageView getImageView(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+        ImageView a = new ImageView();
+        a.setFitHeight(35);
+        a.setFitWidth(35);
+        a.setImage((listSong.getSong().getCover()) == null ? baseImage : listSong.getSong().getCover());
+        return a;
+    }
+
+<<<<<<< HEAD
+    private void cssSelected() {
+=======
+
+    private void removeCss(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+=======
 
 // ===========================================================================
     private void cssSelected() {
+>>>>>>> hoan1
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(0, 360, 0, 0));
         musicListObservableList.get(index).setStyle("-fx-background-color:none");
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
     private void cssUnSelected() {
+=======
+    // làm nổi bật bài hát đag chạy
+    private void addCss(){
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+=======
+    private void cssUnSelected() {
+>>>>>>> hoan1
         int index = listSong.getCurrentIndex();
         musicListObservableList.get(index).setPadding(new Insets(10, 360, 10, 10));
         musicListObservableList.get(index).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
@@ -338,7 +488,55 @@ public class MainAppController implements Initializable {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> hoan1
 //==================================================== click vao bai hat================================================
+=======
+=======
+    // ================================= Tìm kiếm bài hát =========================================
+    @FXML
+    private void searchSong(){
+        String s = removeAccent(searchBar.getText());
+        if(s.isEmpty() || s.length() < 2) {
+            musicList.setItems(musicListObservableList);
+            return;
+        }
+        ObservableList<Label> newObservableList = FXCollections.observableArrayList();
+        boolean exist = false;
+        for(Label a : musicListObservableList){
+            String str = getNameOfSong(a);
+            if(str.contains(s) ) {
+                newObservableList.add(a);
+                exist = true;
+            }
+        }
+        if(exist){
+            musicList.setItems(newObservableList);
+        }
+
+    }
+    // lấy tên bài hát từ label
+    private String getNameOfSong(Label label){
+        String str = "";
+        String tach[] = label.getText().toLowerCase(Locale.ROOT).split("");
+        for(String k : tach){
+            if(k.compareTo("\n") == 0) break;
+            str = str + k;
+        }
+        return removeAccent(str);
+    }
+    // hàm chuyển đổi chữ có dấu thành ko dấu
+    public static String removeAccent(String s) {
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
+    }
+
+>>>>>>> 620da82 (upload file)
+//==================================================== click vao bai hat ================================================
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
     private void addEventHandle(Label label){
         EventHandler<MouseEvent> eventHandlerBox =
                 new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -355,6 +553,8 @@ public class MainAppController implements Initializable {
                         playMedia();
                     }
                 };
+=======
+<<<<<<< HEAD
 =======
 =======
     // ================================= Tìm kiếm bài hát =========================================
@@ -377,8 +577,13 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void searchSong() {
+<<<<<<< HEAD
         String s = removeAccent(searchBar.getText().trim().toLowerCase().replaceAll("\\s++", " "));
         if (s.isEmpty()) {
+=======
+        String s = removeAccent(searchBar.getText().toLowerCase());
+        if (s.length() < 2) {
+>>>>>>> thang1
             musicList.setItems(musicListObservableList);
             return;
         }
@@ -401,7 +606,7 @@ public class MainAppController implements Initializable {
     // lấy tên bài hát từ label
     private String getNameOfSong(Label label) {
         String str = "";
-        String tach[] = label.getText().toLowerCase().split("");
+        String tach[] = label.getText().toLowerCase(Locale.ROOT).split("");
         for (String k : tach) {
             if (k.compareTo("\n") == 0) {
                 break;
@@ -415,11 +620,13 @@ public class MainAppController implements Initializable {
     public static String removeAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(temp).replaceAll("");
+        temp = pattern.matcher(temp).replaceAll("");
+        return temp.replaceAll("đ", "d");
     }
 
 <<<<<<< HEAD
 >>>>>>> 1457561 (search merge from thang/dev not working)
+>>>>>>> hoan1
 // ============================ click vao bai hat ============================
 =======
 // ============================ click vào bài hát ============================
@@ -432,7 +639,11 @@ public class MainAppController implements Initializable {
             int index = Integer.parseInt(label.getId());
             listSong.setCurrent(index);
             cssUnSelected();
+<<<<<<< HEAD
+            curSong = new Media(listSong.getSong().getUri());
+=======
             curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
+>>>>>>> hoan1
             mediaPlayer = new MediaPlayer(curSong);
             playMedia();
             if (isPlay) {
@@ -443,6 +654,47 @@ public class MainAppController implements Initializable {
         label.addEventHandler(javafx.scene.input.MouseEvent.MOUSE_CLICKED, eventHandlerBox);
     }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+    private void createSongList() {
+        if (listSong != null) {
+            for (int i = 0; i < listSong.getSizeOfList(); i++) {
+=======
+=======
+>>>>>>> 620da82 (upload file)
+=======
+>>>>>>> 1bd7b33 (sort songlist)
+    // ================================= khởi tạo list nhạc =======================================
+=======
+    // Tạo ds bài hát
+>>>>>>> 12ae346 (update file)
+=======
+    // ============================================= Tạo ds bài hát ===========================================
+>>>>>>> f8dc02c (sort songlist)
+    private void createSongList(){
+        if(listSong != null){
+            for(int i = 0; i < listSong.getSizeOfList(); i++){
+<<<<<<< HEAD
+>>>>>>> 49c6ef99408ba8f3df980e51600bf6cee2705c16
+                folderName.setText(listSong.getFolderName());
+=======
+>>>>>>> 620da82 (upload file)
+                Label label = new Label();
+                label.setId(String.format("%d", i));
+                label.setText(getSongName() + "\n" + getArtistName());
+                label.setGraphic(getImageView());
+                label.setTextFill(Color.WHITE);
+<<<<<<< HEAD
+                label.setFont(new Font("Arial", 18));
+                label.setPadding(new Insets(0, 360, 0, 0));
+                //------------------------------------------------------------
+=======
+                label.setFont(new Font("Arial",18));
+                label.setPadding(new Insets(0,360,0,0));
+>>>>>>> 1bd7b33 (sort songlist)
+=======
     private void createSongList() {
         ImageView imageView;
         if (listSong != null) {
@@ -463,18 +715,44 @@ public class MainAppController implements Initializable {
                 label.setFont(new Font("Arial", 18));
                 label.setPadding(new Insets(0, 360, 0, 0));
                 //------------------------------------------------------------
+>>>>>>> hoan1
                 addEventHandle(label);
                 musicListObservableList.add(label);
                 listSong.nextSong();
-                musicList.setItems(musicListObservableList);
             }
+<<<<<<< HEAD
+<<<<<<< HEAD
+            musicListObservableList.get(0).setPadding(new Insets(10, 360, 10, 10));
+            musicListObservableList.get(0).setStyle("-fx-background-color: linear-gradient(#328BDB 0%, #207BCF 25%, #1973C9 75%, #0A65BF 100%);");
+
+=======
+            musicList.setItems(musicListObservableList);
+>>>>>>> 620da82 (upload file)
+        }
+    }
+
+<<<<<<< HEAD
+// ===========================================================================
+=======
+//    ========================================================================================================================
+
+>>>>>>> 1bd7b33 (sort songlist)
+=======
         }
     }
 
 // ===========================================================================
+>>>>>>> hoan1
     @Override // khởi tạo ứng dụng
     public void initialize(URL url, ResourceBundle rb) {
 
+<<<<<<< HEAD
+        click1 = false;
+        click2 = false;
+=======
+
+
+>>>>>>> 620da82 (upload file)
         // giá trị biến mute ban đầu không mute
         isMute = false;
         // giá trị biến play ban đầu không play
@@ -496,7 +774,12 @@ public class MainAppController implements Initializable {
         // khởi tạo một SongController
         listSong = new SongController();
         if (!listSong.isEmpty()) { // nếu như trong SongController có bài hát
+<<<<<<< HEAD
+            listSong.sortSongList();
+            curSong = new Media(listSong.getSong().getUri()); // khởi tạo một media
+=======
             curSong = new Media(new File(listSong.getSongPath()).toURI().toString()); // khởi tạo một media
+>>>>>>> hoan1
             mediaPlayer = new MediaPlayer(curSong); // khởi tạo một mediaPlayer từ file media ở trên
             blocked = false; // các chức năng không bị vô hiệu hóa
             createSongList(); // khởi tạo list nhạc

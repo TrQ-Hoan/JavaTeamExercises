@@ -7,7 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FilenameFilter;
+<<<<<<< HEAD
+=======
 import java.io.IOException;
+>>>>>>> hoan1
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -44,6 +47,7 @@ public class SongController {
             openFileX();
         }
         // khởi tạo biến lưu vị trí cho bài hát hiện tại trong list
+//        openFileX();
         current = 0;
     }
 
@@ -199,8 +203,21 @@ public class SongController {
     public void setCurrent(int current) {
         this.current = current;
     }
+<<<<<<< HEAD
 
+<<<<<<< HEAD
+    public void sortSongList(){
+        Collections.sort(listSong, new Comparator<Song>() {
+            @Override
+            public int compare(Song a, Song b) {
+                return a.getTitle().toLowerCase(Locale.ROOT).compareTo(b.getTitle().toLowerCase(Locale.ROOT));
+            }
+        });
+=======
     public String getFolderName() {
         return folderName;
+>>>>>>> hoan1
     }
+=======
+>>>>>>> 86161dd (debug phan tim kiem bai hat)
 }
