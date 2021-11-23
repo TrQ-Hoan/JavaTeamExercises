@@ -29,6 +29,7 @@ import javafx.beans.Observable;
 >>>>>>> 620da82 (upload file)
 =======
 import java.text.Normalizer;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 >>>>>>> hoan1
@@ -79,8 +80,6 @@ public class MainAppController implements Initializable {
     private boolean isPlay;
     private boolean isShuf;
     private boolean blocked;
-    private boolean click1;
-    private boolean click2;
     private int nuLoop;
     private double currentVolume;
     private MediaPlayer mediaPlayer;
@@ -559,7 +558,7 @@ public class MainAppController implements Initializable {
     @FXML
     private void searchSong() {
         String s = removeAccent(searchBar.getText().toLowerCase());
-        if (s.isEmpty() || s.length() < 2) {
+        if (s.length() < 2) {
             musicList.setItems(musicListObservableList);
             return;
         }
@@ -580,7 +579,7 @@ public class MainAppController implements Initializable {
     // lấy tên bài hát từ label
     private String getNameOfSong(Label label) {
         String str = "";
-        String tach[] = label.getText().toLowerCase().split("");
+        String tach[] = label.getText().toLowerCase(Locale.ROOT).split("");
         for (String k : tach) {
             if (k.compareTo("\n") == 0) {
                 break;
@@ -594,7 +593,8 @@ public class MainAppController implements Initializable {
     public static String removeAccent(String s) {
         String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(temp).replaceAll("");
+        temp = pattern.matcher(temp).replaceAll("");
+        return temp.replaceAll("đ", "d");
     }
 
 >>>>>>> 1457561 (search merge from thang/dev not working)

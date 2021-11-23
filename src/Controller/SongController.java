@@ -47,6 +47,7 @@ public class SongController {
             openFileX();
         }
         // khởi tạo biến lưu vị trí cho bài hát hiện tại trong list
+//        openFileX();
         current = 0;
     }
 
@@ -196,6 +197,7 @@ public class SongController {
     public void setCurrent(int current) {
         this.current = current;
     }
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     public void sortSongList(){
@@ -210,4 +212,6 @@ public class SongController {
         return folderName;
 >>>>>>> hoan1
     }
+=======
+>>>>>>> 86161dd (debug phan tim kiem bai hat)
 }

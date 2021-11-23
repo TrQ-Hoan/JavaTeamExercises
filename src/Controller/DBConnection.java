@@ -127,7 +127,6 @@ public class DBConnection {
                     + ");";
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
-//            System.out.println(song);
             System.err.println(e.getMessage());
         }
     }
