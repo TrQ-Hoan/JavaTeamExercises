@@ -1,12 +1,14 @@
 package Controller;
 
 import Model.Song;
+import Model.VNCharacterUtils;
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import javax.xml.bind.DatatypeConverter;
 
 /**
@@ -108,6 +110,35 @@ public class DBConnection {
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    public static HashSet<String> searchSong(String title) {
+        try {
+            HashSet<String> songSearchList = new HashSet<>();
+            ResultSet rs = stmt.executeQuery("Select MUSICLIST.*, songTitle from MUSICLIST, SONGS "
+                    + "WHERE SONGS.songTitle LIKE '%" + title + "%' "
+                    + "AND MUSICLIST.songId = SONGS.songId ORDER BY SONGS.songTitle;");
+            while (rs.next()) {
+                songSearchList.add(rs.getString("songTitle"));
+            }
+            String q = VNCharacterUtils.removeAccent(title);
+            if (!songSearchList.isEmpty() || q.equals(title)) {
+                return songSearchList;
+            }
+            rs = stmt.executeQuery("Select MUSICLIST.*, songTitle from MUSICLIST, SONGS "
+                    + "WHERE MUSICLIST.songId = SONGS.songId ORDER BY SONGS.songTitle;");
+            String rq;
+            while (rs.next()) {
+                rq = rs.getString("songTitle");
+                if (VNCharacterUtils.removeAccent(rq).toLowerCase().contains(q.toLowerCase())) {
+                    songSearchList.add(rs.getString("songTitle"));
+                }
+            }
+            return songSearchList;
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     public static void addSong(Song song) {

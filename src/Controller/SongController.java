@@ -66,8 +66,7 @@ public class SongController {
         File[] files = f.listFiles(filter);
         // nếu mở vào folder không có nhạc
         if (files.length < 1 && songIdList.isEmpty()) {
-            openFileX();
-//            return;
+            return;
         }
         for (File file : files) {
             // đưa các file mp3/m4a vào list Song
@@ -94,12 +93,7 @@ public class SongController {
             listSong_s = IntStream.range(0, songIdList.size()).boxed().collect(Collectors.toList());
             // xáo trộn list số thứ tự các bài hát để dùng khi shuffe được bật
             Collections.shuffle(listSong_s);
-//            return;
-            if (DBConnection.hasDB()) {
-                return;
-            } else {
-                openFileX();
-            }
+            return;
         }
         addFolder(file + "/");
     }
@@ -116,7 +110,7 @@ public class SongController {
 
     // kiể tra danh sách bài hát rỗng hay không
     public boolean isEmpty() {
-        return listSong_s.isEmpty();
+        return songIdList.isEmpty();
     }
 
     public boolean isLastSong() {

@@ -15,6 +15,7 @@ import java.io.File;
 import java.net.URL;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.ResourceBundle;
 =======
 import java.text.Normalizer;
@@ -33,6 +34,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 >>>>>>> hoan1
+=======
+import java.util.HashSet;
+import java.util.ResourceBundle;
+>>>>>>> a49de9c (Fix loop open folder, update search)
 import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,9 +63,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import javafx.scene.input.KeyCodeCombination;
 >>>>>>> thang1
+=======
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+>>>>>>> a49de9c (Fix loop open folder, update search)
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -152,6 +162,18 @@ public class MainAppController implements Initializable {
 // ===================== ẩn hiện list nhạc ============================
     @FXML
     private void openSongList() {
+        if (listSong.isEmpty()) {
+            listSong.addOtherFolder();
+            if (listSong.isEmpty()) {
+                return;
+            }
+            blocked = false;
+            volumeSlider.setDisable(false);
+            curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
+            mediaPlayer = new MediaPlayer(curSong);
+            createSongList();
+            playMedia();
+        }
         if (anchorPane.isVisible() == true) {
 >>>>>>> hoan1
             anchorPane.setVisible(false);
@@ -321,20 +343,6 @@ public class MainAppController implements Initializable {
         curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
         mediaPlayer = new MediaPlayer(curSong);
         cssUnSelected();
-        playMedia();
-    }
-
-    // (next version) hiển thị nội dung menu
-    @FXML // thêm thư mục bài hát
-    void showMenu(MouseEvent event) {
-        listSong.addOtherFolder();
-        if (listSong.isEmpty()) {
-            return;
-        }
-        blocked = false;
-        volumeSlider.setDisable(false);
-        curSong = new Media(new File(listSong.getSongPath()).toURI().toString());
-        mediaPlayer = new MediaPlayer(curSong);
         playMedia();
     }
 
@@ -558,19 +566,31 @@ public class MainAppController implements Initializable {
 =======
 =======
     // ================================= Tìm kiếm bài hát =========================================
+    private final KeyCombination keyCtrlBS = new KeyCodeCombination(KeyCode.BACK_SPACE, KeyCombination.CONTROL_DOWN);
+    private final KeyCombination keyCtrlDEL = new KeyCodeCombination(KeyCode.DELETE, KeyCombination.CONTROL_DOWN);
+
     @FXML
     void pressedReturn(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             searchSong();
         }
+        final int txtLen = searchBar.getText().length();
+        final int posCar = searchBar.getCaretPosition();
+        final int cntStr = searchBar.getText().split("\\s++").length;
         if (event.getCode().equals(KeyCode.BACK_SPACE) // khi bấm phím xoá
-                && searchBar.getText().length() == 1 // còn 1 kí tự
-                && searchBar.getCaretPosition() == 1) { // con trỏ bên phải kí tự
+                && txtLen == 1 // còn 1 kí tự
+                && posCar == 1) { // con trỏ bên phải kí tự
             musicList.setItems(musicListObservableList);
         }
         if (event.getCode().equals(KeyCode.DELETE) // khi bấm phím delete
-                && searchBar.getText().length() == 1 // còn 1 kí tự
-                && searchBar.getCaretPosition() == 0) { // con trỏ bên trái kí tự
+                && txtLen == 1 // còn 1 kí tự
+                && posCar == 0) { // con trỏ bên trái kí tự
+            musicList.setItems(musicListObservableList);
+        }
+        if (keyCtrlBS.match(event) && cntStr < 2 && posCar == txtLen) {
+            musicList.setItems(musicListObservableList);
+        }
+        if (keyCtrlDEL.match(event) && cntStr < 2 && posCar == 0) {
             musicList.setItems(musicListObservableList);
         }
     }
@@ -578,50 +598,26 @@ public class MainAppController implements Initializable {
     @FXML
     private void searchSong() {
 <<<<<<< HEAD
+<<<<<<< HEAD
         String s = removeAccent(searchBar.getText().trim().toLowerCase().replaceAll("\\s++", " "));
         if (s.isEmpty()) {
 =======
         String s = removeAccent(searchBar.getText().toLowerCase());
         if (s.length() < 2) {
 >>>>>>> thang1
+=======
+        String s = searchBar.getText().trim().replaceAll("\\s++", " ");
+        if (s.isEmpty()) {
+>>>>>>> a49de9c (Fix loop open folder, update search)
             musicList.setItems(musicListObservableList);
             return;
         }
         ObservableList<Label> newObservableList = FXCollections.observableArrayList();
-        boolean exist = false;
-        for (Label a : musicListObservableList) {
-            String str = getNameOfSong(a);
-            if (str.contains(s)) {
-                newObservableList.add(a);
-                exist = true;
-            }
-        }
-        if (exist) {
-            musicList.setItems(newObservableList);
-        } else {
-            musicList.setItems(newObservableList);
-        }
-    }
-
-    // lấy tên bài hát từ label
-    private String getNameOfSong(Label label) {
-        String str = "";
-        String tach[] = label.getText().toLowerCase(Locale.ROOT).split("");
-        for (String k : tach) {
-            if (k.compareTo("\n") == 0) {
-                break;
-            }
-            str = str + k;
-        }
-        return removeAccent(str);
-    }
-
-    // hàm chuyển đổi chữ có dấu thành ko dấu
-    public static String removeAccent(String s) {
-        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        temp = pattern.matcher(temp).replaceAll("");
-        return temp.replaceAll("đ", "d");
+        HashSet<String> songSearch = DBConnection.searchSong(s);
+        musicListObservableList.stream()
+                .filter((a) -> (songSearch.contains(a.getText().split("\n")[0])))
+                .forEachOrdered(a -> newObservableList.add(a));
+        musicList.setItems(newObservableList);
     }
 
 <<<<<<< HEAD
