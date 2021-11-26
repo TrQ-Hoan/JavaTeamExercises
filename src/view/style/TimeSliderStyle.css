@@ -1,0 +1,26 @@
+/* Styling the slider thumb */
+.jfx-slider > .thumb {
+    -fx-background-color: #b6b9cd;
+    -fx-pref-height: 10px;
+}
+
+/* Styling the filled track */
+.jfx-slider > .colored-track {
+    -fx-background-color: linear-gradient(to right, #444e67, #b6b9cd);
+}
+
+/* Styling the slider track */
+.jfx-slider > .track {
+    -fx-pref-height: 5px;
+}
+
+/* Styling the slider track */
+.jfx-slider > .track {
+    -fx-background-color: #030406;
+}
+
+
+/* Styling the animated thumb */
+.jfx-slider > .animated-thumb {
+    -fx-background-color: #2b3244;
+}

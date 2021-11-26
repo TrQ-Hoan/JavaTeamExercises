@@ -1,0 +1,43 @@
+#topbar{
+    -fx-background-color: #171c25;
+    -fx-background-radius: 6.0 6.0 0.0 0.0;
+}
+
+#bottombar{
+    -fx-background-color: #171c25;
+    -fx-background-radius: 0.0 0.0 6.0 6.0;
+}
+
+FontAwesomeIcon:hover{
+    -fx-cursor:hand;
+}
+
+.chart{
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.axis {
+    -fx-tick-mark-visible: false;
+    -fx-minor-tick-visible: false;
+    -fx-minor-tick-length: 0;
+    -fx-border-color: transparent;
+}
+
+.axis-label {
+    -fx-text-fill: transparent;
+}
+
+.default-color0.chart-bar {
+    -fx-background-color:linear-gradient(to top, #89D880, #F9F871);
+}
+
+.default-color1.chart-bar {
+    -fx-background-color:linear-gradient(to bottom, #308F89, #D9F3F0);
+}
+
+
+
